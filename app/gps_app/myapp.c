@@ -36,11 +36,7 @@ extern "C"{
 #include "gps_store.h"
 
 
-
-
 static st_gps_thread_param	gt_console_para;		///调试接口线程参数
-
-
 
 
 static VIDEO_NORM_E gs_enNorm = VIDEO_ENCODING_MODE_PAL;
