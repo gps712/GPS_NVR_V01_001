@@ -1,0 +1,308 @@
+/*********************************************************************************
+  * @文件名称 :sample_code.c
+  * @功能描述 :这是一个例程函数，没有实际功能，用来规范程序的编写，变量的定义等
+  * @作	   者 :白养民
+  * @创建日期 :2015-6-17
+  * @文件版本 :0.01
+  *---------------------------------------------------------------------------------
+  * @修改人    修改时间   修改内容
+  *  白养民   2015-06-17  创建函数
+*********************************************************************************/
+////++注意:该文件中的关键字为"sample",所以许多地方的定义需要使用该关键字，用来区分不同的功能或模块的函数
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include <ctype.h>
+
+
+
+////++注意:所有宏定义必须以"DF_"开头，并且全部为大写字母
+#define DF_CONSOLE	   	UART1		///表示调试串口号
+#define DF_MODEM      	UART0		///表示和模块通信的串口号
+
+
+/*********************************************************************************
+  *枚举类型:en_tcp_stage
+  *功能描述:定义了一个枚举类型，它列举了模块登网的不同状态。
+  *---------------------------------------------------------------------------------
+  *修改人    修改时间   修改内容
+  *白养民   2015-06-08  创建函数
+*********************************************************************************/
+////++注意:所有枚举类型定义必须以"en_"开头
+typedef enum _en_sample_tcp_stage
+{
+	SAMPLE_TCP_Idle,					///含义解释
+	SAMPLE_TCP_Gateway1, 				///含义解释
+	SAMPLE_TCP_Gateway2,				///含义解释
+	SAMPLE_TCP_Transparent,				///含义解释
+	SAMPLE_TCP_SHUT,					///含义解释
+	SAMPLE_TCP_Close					///含义解释
+}en_sample_tcp_stage;
+
+
+/*********************************************************************************
+  *结 构 体:st_sample1
+  *功能描述:定义了一个结构体类型，它表示一个用户名称参数
+  *---------------------------------------------------------------------------------
+  *修改人    修改时间   修改内容
+  *白养民   2015-06-08  创建函数
+*********************************************************************************/
+////++注意:所有结构体类型定义必须以"st_"开头
+typedef struct _st_sample_value
+{
+	_st_sample_value *pt;		///表示指向自己的指针类型
+	char section[20];			///含义解释
+	char name[20];				///含义解释
+	int  value;					///含义解释
+}st_sample_value;
+
+
+
+////++注意:所有局部变量不能以"g"开头，其含义分别表示为:
+////++		开头为 t_	表示类型为	结构体
+////++		开头为 e_	表示类型为	枚举型参数
+////++		开头为 ull_	表示类型为	unsigned  long long
+////++		开头为 ll_ 	表示类型为	long long 
+////++		开头为 ul_ 	表示类型为	unsigned  long 
+////++		开头为 l_	表示类型为	long 
+////++		开头为 ui_ 	表示类型为	unsigned  int
+////++		开头为 i_	表示类型为	int
+////++		开头为 us_ 	表示类型为	unsigned short
+////++		开头为 s_	表示类型为	short
+////++		开头为 uc_ 	表示类型为	unsigned char
+////++		开头为 c_	表示类型为	char
+////++注意:所有全局变量必须以"g"开头，其含义分别表示为:
+////++		开头为 gt_	表示类型为	全局结构体
+////++		开头为 ge_	表示类型为	全局枚举型参数
+////++		开头为 gull_表示类型为	全局unsigned  long long
+////++		开头为 gll_	表示类型为	全局long long 
+////++		开头为 gul_	表示类型为	全局unsigned  long 
+////++		开头为 gl_	表示类型为	全局long 
+////++		开头为 gui_	表示类型为	全局unsigned  int
+////++		开头为 gi_	表示类型为	全局int
+////++		开头为 gus_	表示类型为	全局unsigned short
+////++		开头为 gs_	表示类型为	全局short
+////++		开头为 guc_	表示类型为	全局unsigned char
+////++		开头为 gc_	表示类型为	全局char
+////++		开头为 gc_	表示类型为	全局char
+////++注意:所有指针类消息开头必须有p，如下所示:
+////++		开头为 pt_	表示类型为	结构体指针
+////++		开头为 pe_	表示类型为	枚举型参数指针
+////++		开头为 pul_	表示类型为	unsigned  long 型指针
+////++		开头为 pi_	表示类型为	int型指针
+////++		开头为 pc_	表示类型为	char型指针
+////++		开头为 gpt_	表示类型为	全局结构体指针
+////++		开头为 gpe_	表示类型为	全局枚举型参数指针
+////++		开头为 gpul_表示类型为	全局unsigned  long 型指针
+////++		开头为 gpi_	表示类型为	全局int型指针
+////++		开头为 gpc_	表示类型为	全局char型指针
+
+st_sample_value			gt_sample_user;			///声明了一个用户
+en_sample_tcp_stage		ge_sample_stage;		///声明了一个TCP链接状态全局变量
+
+unsigned long long 	gull_sample_val;
+long long 			gll_sample_val;
+unsigned long 		gul_sample_val;
+long 				gl_sample_val;
+unsigned int 		gui_sample_car_speed;
+int 				gi_sample_val;
+unsigned short 		gus_sample_val;
+short 				gs_sample_val;
+unsigned char 		guc_sample_val;
+char 				gc_sample_val;
+
+/*********************************************************************************
+  *函数名称:void sample_test_proc( st_sample1 t_val, en_tcp_stage en_val )
+  *功能描述:这是一个测试程序，将结构体和枚举数据打印出来
+  *输	入: t_val	:用户信息
+  			en_val	:TCP联网状态
+  *输	出: none
+  *返 回 值:none
+  *---------------------------------------------------------------------------------
+  *修改人    修改时间   修改内容
+  *白养民   2015-06-17  创建函数
+*********************************************************************************/
+////++注意:在该例程中，函数都以"sample"开头，其它函数也需要有特殊的开头字符
+void sample_test_proc( st_sample_value t_val, en_sample_tcp_stage e_val )
+{
+	st_sample_value 	t_sample1_tmp;
+	en_sample_tcp_stage e_tcp_stage;
+	unsigned long long 	ull_val;
+	long long 			ll_val;
+	unsigned long 		ul_val;
+	long 				l_val;
+	unsigned int 		ui_val;
+	int 				i_val;
+	unsigned short 		us_val;
+	short 				s_val;
+	unsigned char 		uc_val;
+	char 				c_val;
+	
+	t_sample1_tmp = t_val;
+	e_tcp_stage = e_val;
+	
+	printf("sample_name=%s",t_sample1_tmp.name);
+	printf("tcp_stage=%d",(int)e_tcp_stage);
+}
+
+
+
+/*********************************************************************************
+  *函数名称:void sample_strtrim( unsigned char* s, unsigned char c )
+  *功能描述:该函数功能为去掉字符串s中前后为c的字符
+  *输	入: str_buf	:要处理的字符串，该字符串必须为可修改字符串
+  			c		:要删掉的字符
+  *输	出: str_buf	:修改后的字符串
+  *返 回 值:none
+  *---------------------------------------------------------------------------------
+  *修改人    修改时间   修改内容
+  *白养民   2014-06-08  创建函数
+*********************************************************************************/
+////++注意:在该例程中，函数都以"sample"开头，其它函数也需要有特殊的开头字符
+void sample_strtrim( unsigned char* str_buf, unsigned char c )
+{
+	unsigned char	i, j;
+	unsigned char	* p1, * p2;
+	unsigned char	* p_uc1, * p_uc2;
+
+	if ( str_buf == 0 )
+	{
+		return;
+	}
+
+	// delete the trailing characters
+	if ( *str_buf == 0 )
+	{
+		return;
+	}
+	j = strlen( (const char*)str_buf );
+	p1 = str_buf + j;
+	for ( i = 0; i < j; i++ )
+	{
+		p1--;
+		if ( *p1 != c )
+		{
+			break;
+		}
+	}
+	if ( i < j )
+	{
+		p1++;
+	}
+	*p1 = 0;	// null terminate the undesired trailing characters
+
+	// delete the leading characters
+	p1 = str_buf;
+	if ( *p1 == 0 )
+	{
+		return;
+	}
+	for ( i = 0; *p1++ == c; i++ )
+		;
+	if ( i > 0 )
+	{
+		p2 = str_buf;
+		p1--;
+		for ( ; *p1 != 0; )
+		{
+			*p2++ = *p1++;
+		}
+		*p2 = 0;
+	}
+}
+
+
+
+
+/*********************************************************************************
+  *函数名称:unsigned char sample_month_day(unsigned char uc_month,unsigned char uc_leapyear)
+  *功能描述:该函数功能为计算当月的天数
+  *输	入: uc_month	:要进行计算的月份
+  			uc_leapyear	:是否为闰年，润健为1，非闰年为0
+  *输	出: none
+  *返 回 值:计算出来的天数。
+  *---------------------------------------------------------------------------------
+  *修改人    修改时间   修改内容
+  *白养民   2014-06-08  创建函数
+*********************************************************************************/
+////++注意:在该例程中，函数都以"sample"开头，其它函数也需要有特殊的开头字符
+unsigned char sample_month_day(unsigned char uc_month,unsigned char uc_leapyear)
+{
+	unsigned char uc_day;
+	
+	switch(uc_month)
+	{
+		case 12 :
+		{
+	 		uc_day = 31;
+			break;
+		}
+		case 11 :
+		{
+			uc_day = 30;
+			break;
+		}
+		case 10 :
+		{
+			uc_day = 31;
+			break;
+		}	
+		case 9 :
+		{
+			uc_day = 30;
+			break;
+		}	
+		case 8 :
+		{
+			uc_day = 31;
+			break;
+		}	
+		case 7 :
+		{
+			uc_day = 31;
+			break;
+		}	
+		case 6 :
+		{
+			uc_day = 30;
+			break;
+		}	
+		case 5 :
+		{
+			uc_day = 31;
+			break;
+		}	
+		case 4 :
+		{
+			uc_day = 30;
+			break;
+		}	
+		case 3 :
+		{
+			uc_day = 31;
+			break;
+		}	
+		case 2 :
+		{
+			uc_day = 28;
+			uc_day += uc_leapyear;	
+			break;
+		}	
+		case 1 :
+		{
+			uc_day = 31;
+			break;
+		}	
+		default :
+		{
+			break;
+		}
+	}
+	return uc_day;
+}
+
+
+
+

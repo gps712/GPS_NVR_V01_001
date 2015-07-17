@@ -1,0 +1,17 @@
+---- chip_id Matches (18 in 2 files) ----
+Nvp1918_drv.c:int chip_id[2];
+Nvp1918_drv.c:		//chip_id = gpio_i2c_read( NVP1918+i, 0xF4);
+Nvp1918_drv.c:		chip_id[i] = check_id(vdec_slave_addr[i]);
+Nvp1918_drv.c:		if( (chip_id[i] != NVP1918_R0 )  && 
+Nvp1918_drv.c:			(chip_id[i] != NVP1118B_R0 ) &&
+Nvp1918_drv.c:			(chip_id[i] != NVP1918_R1 )  &&
+Nvp1918_drv.c:			(chip_id[i] != NVP1118B_R1)  &&
+Nvp1918_drv.c:			(chip_id[i] != NVP1918_R2 )  &&
+Nvp1918_drv.c:			(chip_id[i] != NVP1118B_R2 ) &&
+Nvp1918_drv.c:			(chip_id[i] != NVP1914_R2 )  &&
+Nvp1918_drv.c:			(chip_id[i] != NVP1114B_R2 ) )
+Nvp1918_drv.c:			printk("Blade Device ID Error... %x\n", chip_id[i]);
+Nvp1918_drv.c:			printk("Blade Device (0x%x) ID OK... %x\n", vdec_slave_addr[i], chip_id[i]);
+Video.c:extern int chip_id;
+Video.c:		if(chip_id == NVP1914_R2 || chip_id == NVP1114B_R2)
+Video.c:		else if(chip_id == NVP1918_R2 || chip_id == NVP1118B_R2)

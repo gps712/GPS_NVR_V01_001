@@ -1,0 +1,44 @@
+# Hisilicon Hi3516 sample Makefile
+
+#再增加一个编译gui库的Makefile：
+#SUBDIRS=AntiAlias ConvertMono Font LCDDriver MemDev Widget #ConvertColor Core 
+#	JPEG MultiLayer WM
+
+SUBDIRS=Config ConvertColor ConvertMono Core Font LCDDriver 
+LIBOBJS=
+LIBOBJS+=$(wildcard Config/*.o)
+LIBOBJS+=$(wildcard ConvertColor/*.o)
+LIBOBJS+=$(wildcard ConvertMono/*.o)
+LIBOBJS+=$(wildcard Core/*.o)
+LIBOBJS+=$(wildcard Font/*.o)
+LIBOBJS+=$(wildcard LCDDriver/*.o)
+LIBOBJS+=$(wildcard Widget/*.o)
+LIBOBJS+=$(wildcard WM/*.o)
+
+#LIBOBJS+=$(wildcard AntiAlias/*.o)
+#LIBOBJS+=$(wildcard ConvertMono/*.o)
+#LIBOBJS+=$(wildcard Font/*.o)
+#LIBOBJS+=$(wildcard LCDDriver/*.o)
+#LIBOBJS+=$(wildcard MemDev/*.o)
+#LIBOBJS+=$(wildcard ConvertColor/*.o)
+#LIBOBJS+=$(wildcard Core/*.o)
+#LIBOBJS+=$(wildcard JPEG/*.o)
+#LIBOBJS+=$(wildcard MultiLayer/*.o)
+#LIBOBJS+=$(wildcard WM/*.o)
+#LIBOBJS+=$(wildcard Widget/*.o)
+
+all:
+	for name in $(SUBDIRS); do (cd $$name && make && cd ../) done 
+	make guilib
+
+.PHONY:guilib
+
+guilib:
+	arm-hisiv100nptl-linux-ar rv libucgui.a $(LIBOBJS)
+
+.PHONY:clean    
+
+clean:
+	@rm -f libucgui.a 
+	@for name in $(SUBDIRS); do (cd $$name && make clean && cd ../) done
+

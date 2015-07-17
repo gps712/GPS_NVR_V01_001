@@ -1,0 +1,2 @@
+---- 0xca Matches (1 in 1 files) ----
+Video.c (d:\vmware_share\hi3531\sdka\ahd_1918c_image\nvp1918c_extenal_ver0.0.3):773:	gpio_i2c_write(vdec_slave_addr[0], 0xCA, 0x01);  //only enable video port1

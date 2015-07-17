@@ -1,0 +1,47 @@
+# Hisilicon Hi3520D sample Makefile.param
+
+#demo or socket, just useful for hi3520D
+#MY_APP_DIR := (PWD)/param
+
+#增加需要添加的目录在这里，只需要修改这里就可以了
+MY_APP_DIR := $(PWD)/common 
+MY_APP_DIR += $(PWD)/bai_gps_src 
+MY_APP_DIR += $(PWD)/bai_gps_store 
+MY_APP_DIR += $(PWD)/bai_inifile 
+MY_APP_DIR += $(PWD)/jack_gps_video 
+MY_APP_DIR += $(PWD)/jack_ucgui-include 
+MY_APP_DIR += $(PWD)/src_cpp
+MY_APP_DIR += $(PWD)/wxg_jrtplib3
+MY_APP_DIR += $(PWD)/wxg_myinc
+MY_APP_DIR += $(PWD)/wxg_src
+
+#将目录添加到包含的头文件中
+#MY_APP_FLAGS := -I$(PWD)/param
+MY_APP_FLAGS := $(foreach n,$(MY_APP_DIR),-I$(n))
+
+MY_APP_FLAGS += -I$(PWD)/../nanomsg
+MY_APP_FLAGS += -I$(PWD)/../nanomsg/include/ -lrt
+
+
+#将库文件添加到包含的链接文件中
+MY_APP_LIBA_DIR += $(PWD)/../gps_lib
+MY_APP_LIBA := $(foreach n,$(MY_APP_LIBA_DIR),$(wildcard $(n)/*.a))
+
+#MY_APP_LIBA := /opt/hisi-linux-nptl/arm-hisiv100-linux/nanomsg/lib/libnanomsg.a
+#MY_APP_LIBA += $(PWD)/../gps_lib/libjrtp.a
+#MY_APP_LIBA += $(PWD)/../gps_lib/libucgui.a
+
+
+#通过目录生成所包含.C文件的列表
+#MY_APP_SRC := $(wildcard $(PWD)/param/*.c)
+#MY_APP_SRC += $(wildcard $(PWD)/inifile/*.c)
+MY_APP_SRC := $(foreach n,$(MY_APP_DIR),$(wildcard $(n)/*.c))
+
+#通过目录生成所包含.C文件的列表
+MY_CPP_SRC := $(foreach n,$(MY_APP_DIR),$(wildcard $(n)/*.cpp))
+
+#将所有的.C文件改变为.O文件。
+MY_APP_OBJ := $(MY_APP_SRC:%.c=%.o)
+#将所有的.C文件改变为.O文件。
+MY_CPP_OBJ := $(MY_CPP_SRC:%.cpp=%.o)
+

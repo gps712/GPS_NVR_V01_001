@@ -1,0 +1,36 @@
+# Hisilicon Hi3516 sample Makefile
+
+#include ../../Makefile.param
+CC=arm-hisiv100nptl-linux-gcc 
+CPP=arm-hisiv100nptl-linux-cpp 
+LD=arm-hisiv100nptl-linux-ld 
+AR=arm-hisiv100nptl-linux-ar 
+RANLIB=arm-hisiv100nptl-linux-ranlib 
+STRIP=arm-hisiv100nptl-linux-strip 
+LDFLAGS="-L/opt/hisi-linux-nptl/arm-hisiv100-linux/target/lib" 
+CXX=arm-hisiv100nptl-linux-g++ 
+CPPFLAGS="-I/opt/hisi-linux-nptl/arm-hisiv100-linux/target/include" 
+./configure --prefix=/opt/hisi-linux-nptl/arm-hisiv100-linux/target/ --build=x86_64-linux --host=arm-hisiv100nptl-linux
+
+#CC = arm-hisiv100nptl-linux-gcc;#arm-linux-gcc
+CFLAGS=-I ConverColor -I../Config/ -I../Core/ -I../WM/
+
+#all c files at current directory
+
+
+SRCS:=$(wildcard *.c)
+
+#replace .c to .o in SRCS
+OBJS:=$(SRCS:%.c=%.o)
+
+all:$(OBJS)
+
+%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+.PHONY : clean
+
+clean:
+	rm *.o
+
+

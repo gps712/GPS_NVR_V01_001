@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <string.h> 
+#include <pthread.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+
+#include "jt808_head.h"
+
+
+#define DF_ERROR3G		65
+
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+
+extern JT808_TX_NODEDATA node_head;
+int main(void )
+{
+	pid_t pid,child_pid;
+	int result,count, stat_val;
+	char buf[20];
+	count =0;
+	//首先自检初始化
+again:
+	result = system("/etc/ppp/peers/autogprs.sh");
+	JT808_PRT("value = %d\n",result);
+	//result = 0x4401;
+	gps_datacount("gps.log",&data_contrl.read_offset,&data_contrl.write_offset);
+	data_contrl.write_offset = gps_maxid("gps.log");
+	if(data_contrl.write_offset == -1)
+	{
+		data_contrl.write_offset =0;
+	}
+	JT808_PRT("data_contrl.write_offset= %d\n",data_contrl.write_offset);
+	gps_thread();
+	//gps_thread_join();
+	#if 0
+	if(result == 0x4401)
+	{
+		init_list();
+		param_proc();
+		sprintf(buf, "%d", gps_param.id_0x0018);
+		result = tcp_connect(gps_param.id_0x0013, buf);
+		if(result>0)
+		{
+			 linkstatus.mian_ip= result;
+			 bzero(buf,sizeof(buf));
+			 JT808_PRT("linkstatus %d \n",linkstatus);
+			if(socket_rx_data()!=DF_SUCCESS)
+			{
+				JT808_PRT("send thread start failed\n");
+				return 0;
+			}
+			if(socket_tx_data()!=DF_SUCCESS)
+			{
+				JT808_PRT("receive thread start failed\n");
+				return 0;
+			}
+			if(strcmp(gps_param.id_0xF003,"12345678")==0)
+			{
+				JT808_PRT("terminal send register commd\n");
+				jt808_tx_register();
+			}
+			else//send the Authentication cmd;
+			{
+				jt808_tx_auth();
+			}
+			
+			socket_rx_data_contl(0);
+			socket_tx_data_contl(0);
+			gps_thread_join();
+		}
+	}
+	else
+	{
+	  system("/etc/ppp/peers/gprsoff");	
+	  sleep(2);
+	  JT808_PRT("kill pid and restart..\n");
+	  goto again;
+	}
+	#endif
+}
+
+#ifdef __cplusplus
+}; //end of extern "C" {
+#endif
+

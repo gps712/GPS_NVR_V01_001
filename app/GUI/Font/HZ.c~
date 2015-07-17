@@ -1,0 +1,228 @@
+#include "string.h"
+#include "fcntl.h"
+//#include "io.h"
+#include <stdio.h>
+#include "HZ.h"
+
+//#include "Common.h"
+#include "GUI_Private.h"
+
+//#include "GProtect.h"
+
+static int handle;
+FILE* hzkhandel;
+
+int OpenHZ(const char *Hz16Path)
+{
+	 return (handle=open(Hz16Path,O_BINARY));
+/* 2005-06-17 9:08:32
+	int ret = 1;
+	handle=fopen(Hz16Path, "rb");
+	if(handle == 0) ret = -1;
+	return ret;	*/
+}
+
+FILE* OpenHZKFile(const char *HzPath)
+{
+	 return (hzkhandel = fopen(HzPath, "wb"));
+}
+
+void CloseHZKFile()
+{
+	fclose(hzkhandel);
+//	hzkhandel
+}
+
+void WirteHZKFile(unsigned char* buf, int len)
+{
+	fprintf(hzkhandel, "%s\n", buf);
+//	fwrite(buf, len, 1, hzkhandel);
+	fflush(hzkhandel);
+}
+
+
+int CloseHZ()
+{
+
+ if (handle<0) return -1;
+ else return close (handle);
+/* 2005-06-17 9:08:40
+ if (handle == 0) return -1;
+ else return fclose(handle);
+*/
+}
+
+int GetBit(unsigned char c,int n)
+{
+	return((c>>n)&1);
+}
+
+int WriteHZ (int x, int y,const char *p,int color)
+{
+  U16 c1,c2,rec;
+  long l;
+  char pixeldata[32];
+
+  int BytesPerLine;
+  GUI_DRAWMODE DrawMode = GUI_Context.TextMode;
+  GUI_DRAWMODE OldDrawMode;
+
+  if (handle<0 ) return 0;
+  if (p==NULL) return 0;
+
+  c1=(p[0]-0xa1)&0x07f;
+  c2=(p[1]-0xa1)&0x07f;
+
+  rec=c1*94+c2;
+  l=rec*32L;
+
+  lseek(handle,l,SEEK_SET);
+  read(handle,pixeldata,32);
+
+/* 2005-06-17 9:09:08
+  fseek(handle,l,SEEK_SET);
+  fread(pixeldata,32, 1, handle);*/
+
+  BytesPerLine = 2;
+  OldDrawMode  = LCD_SetDrawMode(DrawMode);
+  LCD_DrawBitmap (GUI_Context.DispPosX, GUI_Context.DispPosY,
+		  HZSIZEX,HZSIZEY,
+		  1, 1,
+		  1,            /*Bits per Pixel */
+		  BytesPerLine,
+		  (U8*)pixeldata,
+//		  NULL  /* no palette means default palette */
+		  &LCD_BKCOLORINDEX  /* no palette means default palette */
+		  );
+  /* Fill empty pixel lines */
+  /*
+  if (GUI_Context.pAFont->YDist > GUI_Context.pAFont->YSize) {
+    int YMag = GUI_Context.pAFont->YMag;
+    int YDist = GUI_Context.pAFont->YDist * YMag;
+    int YSize = GUI_Context.pAFont->YSize * YMag;
+    if (DrawMode != LCD_DRAWMODE_TRANS) {
+    LCD_COLOR OldColor = GUI_GetColor();
+    GUI_SetColor(GUI_GetBkColor());
+    LCD_FillRect(GUI_Context.DispPosX,
+		 GUI_Context.DispPosY + YSize,
+		 GUI_Context.DispPosX + pCharInfo->XSize,
+		 GUI_Context.DispPosY + YDist);
+    GUI_SetColor(OldColor);
+  }
+  */
+  LCD_SetDrawMode(OldDrawMode); /* Restore draw mode */
+  GUI_Context.DispPosX += HZSIZEX;
+  return 1;
+}
+
+int WriteHZ24(int x, int y,const char *p,int color)
+{
+  U16 c1,c2,rec;
+  long l;
+  char pixeldata[72];
+
+  int BytesPerLine;
+  GUI_DRAWMODE DrawMode = GUI_Context.TextMode;
+  GUI_DRAWMODE OldDrawMode;
+
+  if (handle<0 ) return 0;
+  if (p==NULL) return 0;
+
+  c1=(p[0]-0xa1)&0x07f;
+  c2=(p[1]-0xa1)&0x07f;
+
+  rec=c1*94+c2;
+  l=rec*72L;
+
+  lseek(handle,l,SEEK_SET);
+  read(handle,pixeldata,72);
+
+/* 2005-06-17 9:09:08
+  fseek(handle,l,SEEK_SET);
+  fread(pixeldata,32, 1, handle);*/
+
+  BytesPerLine = 3;
+  OldDrawMode  = LCD_SetDrawMode(DrawMode);
+  LCD_DrawBitmap (GUI_Context.DispPosX, GUI_Context.DispPosY,
+		  HZSIZEX24,HZSIZEY24,
+		  1, 1,
+		  1,            /*Bits per Pixel */
+		  BytesPerLine,
+		  (U8*)pixeldata,
+//		  NULL  /* no palette means default palette */
+		  &LCD_BKCOLORINDEX  /* no palette means default palette */
+		  );
+
+  LCD_SetDrawMode(OldDrawMode); /* Restore draw mode */
+  GUI_Context.DispPosX += HZSIZEX24;
+  return 1;
+}
+
+int WriteHZ24ByOff(int offset, char *p,int show)
+{
+//  U16 c1,c2,rec;
+  long l;
+//  char pixeldata[72];
+
+  int BytesPerLine;
+  GUI_DRAWMODE DrawMode = GUI_Context.TextMode;
+  GUI_DRAWMODE OldDrawMode;
+
+  if (handle<0 ) return 0;
+  if (p==NULL) return 0;
+
+/* 2005-07-29 11:58:08
+  c1=(p[0]-0xa1)&0x07f;
+  c2=(p[1]-0xa1)&0x07f;
+
+  rec=c1*94+c2;
+  l=rec*72L;
+*/
+  l= offset;
+  lseek(handle,l,SEEK_SET);
+  read(handle,p,72);
+
+/* 2005-06-17 9:09:08
+  fseek(handle,l,SEEK_SET);
+  fread(pixeldata,32, 1, handle);*/
+  if(!show)	return 1;
+  BytesPerLine = 3;
+  OldDrawMode  = LCD_SetDrawMode(DrawMode);
+  LCD_DrawBitmap (GUI_Context.DispPosX, GUI_Context.DispPosY,
+		  HZSIZEX24,HZSIZEY24,
+		  1, 1,
+		  1,            /*Bits per Pixel */
+		  BytesPerLine,
+		  (U8*)p,
+//		  NULL  /* no palette means default palette */
+		  &LCD_BKCOLORINDEX  /* no palette means default palette */
+		  );
+
+  LCD_SetDrawMode(OldDrawMode); /* Restore draw mode */
+  GUI_Context.DispPosX += HZSIZEX24;
+  return 1;
+}
+
+int GetPointDataHZ24(int x, int y, char *p)
+{
+  U16 c1,c2,rec;
+  long l;
+  char pixeldata[72];
+
+  if (handle<0 ) return 0;
+  if (p==NULL) return 0;
+
+  c1=(p[0]-0xa1)&0x07f;
+  c2=(p[1]-0xa1)&0x07f;
+
+  rec=c1*94+c2;
+  l=rec*72L;
+
+  lseek(handle,l,SEEK_SET);
+  read(handle,pixeldata,72);
+
+/* 2005-06-17 9:09:08
+  fseek(handle,l,SEEK_SET);
+  fread(pixeldata,32, 1, handle);*/
+  return 1;
+}

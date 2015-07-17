@@ -1,0 +1,43 @@
+
+
+/***********************************************************************
+  REVISION LOG ENTRY
+  Revision By: ucgui
+  Revised on 2005-6-12 23:56:25
+  Comments: ...
+ ***********************************************************************/
+
+#ifndef __HZ_H__
+#define __HZ_H__
+
+#include "io.h"
+#include <stdio.h>
+
+
+
+#define HZSIZEY              16
+#define HZSIZEX              16
+
+#define HZSIZEY24            24
+#define HZSIZEX24            24
+
+int OpenHZ(const char *Hz16Path);
+int CloseHZ();
+FILE* OpenHZKFile(const char* HzPath);
+void CloseHZKFile();
+void WirteHZKFile(unsigned char* buf, int len);
+
+int WriteHZ(int x, int y,const char *p,int color);
+int WriteHZ24(int x, int y,const char *p,int color);
+int GetPointDataHZ24(int x, int y, char *p);
+int WriteHZ24ByOff(int offset, char *p,int show);
+
+#endif //__HZ_H__
+
+/******************************************************************
+*
+*                 ºº×Ö
+*
+*******************************************************************
+*/
+

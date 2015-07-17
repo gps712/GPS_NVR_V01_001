@@ -1,0 +1,12 @@
+prefix=/opt/hisi-linux-nptl/arm-hisiv100-linux/nanomsg
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Nanomsg
+Description: nanomsg library is a high-performance implementation of several scalability protocols.
+URL: http://nanomsg.org/
+Version: 2.1.2
+Requires:
+Libs: -L${libdir} -lnanomsg -lrt  
+Cflags: -I${includedir}
