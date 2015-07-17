@@ -30,7 +30,7 @@ extern "C" {
 #include <sys/ioctl.h>
 #include "hi_rtc.h"
 
-/* ´Ë´¦¿ªÊ¼Ìí¼Óµş¼ÓOSDµÄ´úÂë */
+/* æ­¤å¤„å¼€å§‹æ·»åŠ å åŠ OSDçš„ä»£ç  */
 /******************************************************************************
   Copyright (C), 2001-2011, Hisilicon Tech. Co., Ltd.
  ******************************************************************************
@@ -503,21 +503,21 @@ HI_VOID *SAMPLE_HIFB_REFRESH(void *pData)
 
 
 /***************************************************************
-*Ãû³Æ: TransByteToData
-*ÃèÊö: ´ÓÖ¸¶¨×Ö´®ÖĞ×éºÏ³öÖ¸¶¨³¤¶ÈµÄÊı¾İÀàĞÍ£¬¿ÉÖ¸¶¨´óĞ¡¶ËÄ£Ê½,
-*             Ä¿Ç°×î¶à¿É×éºÏuintĞÍÊı¾İ ÀàĞÍ
-*ÊäÈë:  INT8 *String,  Ö¸¶¨×Ö´®
-*              UINT16 SrcStrLen Ô´×Ö´®»òÊı×é³¤¶È
-*              UINT16 StartSlot Ô´×Ö´®µÄÆğÊ¼Î»ÖÃ
-*              UINT32 Len,      Òª×éºÏÊı¾İÀàĞÍµÄ³¤¶È
-*              UINT8 Flag, ´óĞ¡¶ËÄ£Ê½±êÖ¾,TRUE =  °´ÕÕ´ó¶ËÄ£Ê½×éºÏ£¬False = °´ÕÕĞ¡¶ËÄ£Ê½×éºÏ
+*åç§°: TransByteToData
+*æè¿°: ä»æŒ‡å®šå­—ä¸²ä¸­ç»„åˆå‡ºæŒ‡å®šé•¿åº¦çš„æ•°æ®ç±»å‹ï¼Œå¯æŒ‡å®šå¤§å°ç«¯æ¨¡å¼,
+*             ç›®å‰æœ€å¤šå¯ç»„åˆuintå‹æ•°æ® ç±»å‹
+*è¾“å…¥:  INT8 *String,  æŒ‡å®šå­—ä¸²
+*              UINT16 SrcStrLen æºå­—ä¸²æˆ–æ•°ç»„é•¿åº¦
+*              UINT16 StartSlot æºå­—ä¸²çš„èµ·å§‹ä½ç½®
+*              UINT32 Len,      è¦ç»„åˆæ•°æ®ç±»å‹çš„é•¿åº¦
+*              UINT8 Flag, å¤§å°ç«¯æ¨¡å¼æ ‡å¿—,TRUE =  æŒ‰ç…§å¤§ç«¯æ¨¡å¼ç»„åˆï¼ŒFalse = æŒ‰ç…§å°ç«¯æ¨¡å¼ç»„åˆ
 *
-*Êä³ö:   ÎŞ
-*·µ»ØÖµ:×éºÏºÃµÄÊı¾İ
-*ĞŞ¸Ä¼ÇÂ¼:
+*è¾“å‡º:   æ— 
+*è¿”å›å€¼:ç»„åˆå¥½çš„æ•°æ®
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-*ºîÑŞç÷      2011.4.12             ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+*ä¾¯è‰³çª      2011.4.12             åˆ›å»ºå‡½æ•°
 ****************************************************************/
 HI_U32 TransByteToData (const HI_U8 *String,
                         HI_U16 SrcStrLen,
@@ -531,9 +531,9 @@ HI_U32 TransByteToData (const HI_U8 *String,
     HI_U16 usTemp = 0;
     HI_U32 uiTemp = 0;
     usTempStrLen = SrcStrLen;
-    /*Îª·ÀÖ¹Ô½½ç£¬ÆğÊ¼Î»ÖÃÄ£´¦Àí */
+    /*ä¸ºé˜²æ­¢è¶Šç•Œï¼Œèµ·å§‹ä½ç½®æ¨¡å¤„ç† */
     usTempLocSlot = StartSlot%usTempStrLen;
-    /*Ğè×éºÏµÄÊı¾İÀàĞÍ³¤¶È´óÓÚ×Ö´®³¤¶È*/
+    /*éœ€ç»„åˆçš„æ•°æ®ç±»å‹é•¿åº¦å¤§äºå­—ä¸²é•¿åº¦*/
     if (Len > usTempStrLen)
     {
         usTempDataLen = usTempStrLen;
@@ -542,7 +542,7 @@ HI_U32 TransByteToData (const HI_U8 *String,
     {
         usTempDataLen = (HI_U16)Len;
     }
-    /*´ó¶ËÄ£Ê½*/
+    /*å¤§ç«¯æ¨¡å¼*/
     if (HI_TRUE == Flag)
     {
         for (usTemp = usTempDataLen; usTemp > 0; usTemp--)
@@ -553,7 +553,7 @@ HI_U32 TransByteToData (const HI_U8 *String,
     }
     else
     {
-        /*µÍÎ»ÔÚÇ°*/
+        /*ä½ä½åœ¨å‰*/
         for (usTemp = 0; usTemp < usTempDataLen; usTemp++)
         {
             uiTemp += String[usTempLocSlot] << (8 * usTemp);
@@ -563,26 +563,26 @@ HI_U32 TransByteToData (const HI_U8 *String,
     return uiTemp;
 }
 /***************************************************************
-*Ãû³Æ: void DecToStringReduce(UINT8 Type,UINT8 *OutStrBuffer, UINT16 Hex, UINT8 *DesCount)
-*ÃèÊö: °ÑÒ»¸ö10½øÖÆµÄÊı×ª»»³É×Ö·ûĞÍµÄÊı¾İ
-                Ö÷ÒªÓÃÔÚ¸øGPRSÄ£¿é·¢ËÍÃüÁîÉÏ£¬Èç025---->"25"
-*ÊäÈë:   DispType  ----ÀàĞÍ£¬1Îª³¤ÏÔÊ¾£¬0Îª¶ÌÏÔÊ¾
-                  OutStrBuffer   -------×ª»»ºóµÄÊı¾İ
-                  Hex ------  ´ı×ª»»µÄÊı¾İ
-                  DesCount------×ª»»ºóµÄÊı¾İµÄ¸öÊı£¬¼´³¤¶È
-*Êä³ö:  ÎŞ
-*ĞŞ¸Ä¼ÇÂ¼:
+*åç§°: void DecToStringReduce(UINT8 Type,UINT8 *OutStrBuffer, UINT16 Hex, UINT8 *DesCount)
+*æè¿°: æŠŠä¸€ä¸ª10è¿›åˆ¶çš„æ•°è½¬æ¢æˆå­—ç¬¦å‹çš„æ•°æ®
+                ä¸»è¦ç”¨åœ¨ç»™GPRSæ¨¡å—å‘é€å‘½ä»¤ä¸Šï¼Œå¦‚025---->"25"
+*è¾“å…¥:   DispType  ----ç±»å‹ï¼Œ1ä¸ºé•¿æ˜¾ç¤ºï¼Œ0ä¸ºçŸ­æ˜¾ç¤º
+                  OutStrBuffer   -------è½¬æ¢åçš„æ•°æ®
+                  Hex ------  å¾…è½¬æ¢çš„æ•°æ®
+                  DesCount------è½¬æ¢åçš„æ•°æ®çš„ä¸ªæ•°ï¼Œå³é•¿åº¦
+*è¾“å‡º:  æ— 
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-  ÕÅ²©°®      2014-8-21            ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+  å¼ åšçˆ±      2014-8-21            åˆ›å»ºå‡½æ•°
 ****************************************************************/
 void DecToString(HI_U8 DispType, HI_U8 *OutStrBuffer, HI_U16 Hex, HI_U8 *DesCount)
 {
     HI_U8 ucCount = 0, ucTemp, ucFlag = HI_FALSE;
     HI_U16 usTemp;
-    if (DispType == HI_TRUE)/* Ê®½øÖÆµÄ¶ÌÏÔÊ¾ */
+    if (DispType == HI_TRUE)/* åè¿›åˆ¶çš„çŸ­æ˜¾ç¤º */
     {
-        if (Hex > 255)/* ´óÓÚ255Ê± */
+        if (Hex > 255)/* å¤§äº255æ—¶ */
         {
             //10000
             ucTemp = (HI_U8)(Hex / 10000);
@@ -620,7 +620,7 @@ void DecToString(HI_U8 DispType, HI_U8 *OutStrBuffer, HI_U16 Hex, HI_U8 *DesCoun
         }
         else
         {
-            /* °Ñ012µ±³É12,¶ÌÊı¾İÏÔÊ¾£¬ÓÃÓÚ¸øÒÔÌ«ÍøÄ£¿é·¢ÃüÁî*/
+            /* æŠŠ012å½“æˆ12,çŸ­æ•°æ®æ˜¾ç¤ºï¼Œç”¨äºç»™ä»¥å¤ªç½‘æ¨¡å—å‘å‘½ä»¤*/
             usTemp = Hex;
             //100
             ucTemp = (HI_U8)(usTemp / 100);
@@ -643,7 +643,7 @@ void DecToString(HI_U8 DispType, HI_U8 *OutStrBuffer, HI_U16 Hex, HI_U8 *DesCoun
     }
     else
     {
-        if (Hex > 255)/* ´óÓÚ255Ê± */
+        if (Hex > 255)/* å¤§äº255æ—¶ */
         {
             //10000
             // ucTemp = (HI_U8)(Hex / 10000);
@@ -667,7 +667,7 @@ void DecToString(HI_U8 DispType, HI_U8 *OutStrBuffer, HI_U16 Hex, HI_U8 *DesCoun
         {
             if (Hex > 100)
             {
-                /* °Ñ012µ±³É12,¶ÌÊı¾İÏÔÊ¾£¬ÓÃÓÚ¸øÒÔÌ«ÍøÄ£¿é·¢ÃüÁî*/
+                /* æŠŠ012å½“æˆ12,çŸ­æ•°æ®æ˜¾ç¤ºï¼Œç”¨äºç»™ä»¥å¤ªç½‘æ¨¡å—å‘å‘½ä»¤*/
                 usTemp = Hex;
                 //100
                 ucTemp = (HI_U8)(usTemp / 100);
@@ -684,15 +684,15 @@ void DecToString(HI_U8 DispType, HI_U8 *OutStrBuffer, HI_U16 Hex, HI_U8 *DesCoun
     *DesCount = ucCount;
 }
 /***************************************************************
-*Ãû³Æ: TimeConvertToString
-*ÃèÊö:
-*ÊäÈë:  ÎŞ
-*Êä³ö:  ÎŞ
-·µ»ØÖµ: ÎŞ
-*ĞŞ¸Ä¼ÇÂ¼:
+*åç§°: TimeConvertToString
+*æè¿°:
+*è¾“å…¥:  æ— 
+*è¾“å‡º:  æ— 
+è¿”å›å€¼: æ— 
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-*²Üº£²¨      2010.01.24           ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+*æ›¹æµ·æ³¢      2010.01.24           åˆ›å»ºå‡½æ•°
 ****************************************************************/
 void TimeConvertToString(HI_U8 *Buf, HI_U8 *Time, HI_U8 Flag, HI_U8 *Count)
 {
@@ -759,11 +759,11 @@ HI_U16 UncodeToGbk(HI_U16 src)
 }
 
 /**
- * DESCRIPTION: ÊµÏÖÓÉutf8±àÂëµ½gbk±àÂëµÄ×ª»»
-                         ×ª»»ºóµÄÓ¢ÎÄÎª1byte , ÖĞÎÄºº×ÖÎª2 bytes
+ * DESCRIPTION: å®ç°ç”±utf8ç¼–ç åˆ°gbkç¼–ç çš„è½¬æ¢
+                         è½¬æ¢åçš„è‹±æ–‡ä¸º1byte , ä¸­æ–‡æ±‰å­—ä¸º2 bytes
  *
-* Input: gbkStr,×ª»»ºóµÄ×Ö·û´®;  srcStr,´ı×ª»»µÄ×Ö·û´®; maxGbkStrlen, gbkStrµÄ×î
- ´ó³¤¶È
+* Input: gbkStr,è½¬æ¢åçš„å­—ç¬¦ä¸²;  srcStr,å¾…è½¬æ¢çš„å­—ç¬¦ä¸²; maxGbkStrlen, gbkStrçš„æœ€
+ å¤§é•¿åº¦
 * Output: gbkStr
 .* Returns: -1,fail;>0,success
  *
@@ -776,28 +776,28 @@ int utf82gbk(char *gbkStr, const char *srcStr, int maxGbkStrlen)
         printf("Bad Parameter1\n");
         return -1;
     }
-    //Ê×ÏÈÏÈ½«utf8±àÂë×ª»»Îªunicode±àÂë
-    if (NULL == setlocale(LC_ALL, "zh_CN.UTF-8")) //ÉèÖÃ×ª»»ÎªunicodeÇ°µÄÂë,µ±Ç°Îªutf8±àÂë
+    //é¦–å…ˆå…ˆå°†utf8ç¼–ç è½¬æ¢ä¸ºunicodeç¼–ç 
+    if (NULL == setlocale(LC_ALL, "zh_CN.UTF-8")) //è®¾ç½®è½¬æ¢ä¸ºunicodeå‰çš„ç ,å½“å‰ä¸ºutf8ç¼–ç 
     {
         printf("Bad Parameter2\n");
         return -1;
     }
-    int unicodeLen = mbstowcs(NULL, srcStr, 0); //¼ÆËã×ª»»ºóµÄ³¤¶È
+    int unicodeLen = mbstowcs(NULL, srcStr, 0); //è®¡ç®—è½¬æ¢åçš„é•¿åº¦
     if (unicodeLen <= 0)
     {
         printf("Can not Transfer!!!\n");
         return -1;
     }
     wchar_t *unicodeStr = (wchar_t *) calloc(sizeof(wchar_t), unicodeLen + 1);
-    mbstowcs(unicodeStr, srcStr, strlen(srcStr)); //½«utf8×ª»»Îªunicode
+    mbstowcs(unicodeStr, srcStr, strlen(srcStr)); //å°†utf8è½¬æ¢ä¸ºunicode
     for (usCount = 0, gbkLen = 0; usCount < unicodeLen * 2; usCount += 2)
     {
-        if (unicodeStr[usCount / 2] < 0x7f)/* Ó¢ÎÄ×Ö·û */
+        if (unicodeStr[usCount / 2] < 0x7f)/* è‹±æ–‡å­—ç¬¦ */
         {
             gbkStr[gbkLen] = (HI_U8)unicodeStr[usCount / 2];
             gbkLen++;
         }
-        else/* ÖĞÎÄºº×Ö */
+        else/* ä¸­æ–‡æ±‰å­— */
         {
             usTemp = UncodeToGbk(unicodeStr[usCount / 2]);
             gbkStr[gbkLen] = (HI_U8)(usTemp >> 8);
@@ -805,7 +805,7 @@ int utf82gbk(char *gbkStr, const char *srcStr, int maxGbkStrlen)
             gbkLen += 2;
         }
     }
-    gbkStr[gbkLen] = 0; //Ìí¼Ó½áÊø·û
+    gbkStr[gbkLen] = 0; //æ·»åŠ ç»“æŸç¬¦
     free(unicodeStr);
     return gbkLen;
 }
@@ -997,7 +997,7 @@ HI_VOID *SAMPLE_HIFB_PANDISPLAY(void *pData)
         munmap(pShowScreen, fix.smem_len);
         return HI_NULL;
     }
-    /**************************************»ñµÃÊ±¼äÊı¾İ***************************/
+    /**************************************è·å¾—æ—¶é—´æ•°æ®***************************/
     gettimeofday(&tv,NULL);
     tmnow = localtime(&tv.tv_sec);
     (void)GUI_Init();
@@ -1025,7 +1025,7 @@ HI_VOID *SAMPLE_HIFB_PANDISPLAY(void *pData)
             GUI_DispStringAt(Dispbuf, 100, 400);
             GUI_DispStringAt(Dispbuf, 100, 500);
             GUI_DispStringAt(Dispbuf, 100, 600);
-            //utf82gbk(Dispbuf, "Ìì½ò123abcABC23ÆßÒ»¶şÍ¨ĞÅ¹ã²¥ÓĞÏŞ¹«Ë¾", sizeof(Dispbuf));
+            //utf82gbk(Dispbuf, "å¤©æ´¥123abcABC23ä¸ƒä¸€äºŒé€šä¿¡å¹¿æ’­æœ‰é™å…¬å¸", sizeof(Dispbuf));
             //GUI_DispStringAt(Dispbuf, 100, 500);
         }
         break;
@@ -1055,12 +1055,12 @@ HI_VOID *SAMPLE_HIFB_PANDISPLAY(void *pData)
 */
 HI_U16 gusShowBitmap[50][2000]= {0};
 
-/* º¯ÊıÃèÊö:
-µÃµ½Ä³¸ö×Ö·ûµÄµãÕó£¬·ÅÔÚDestBufÀï£¬
-ÆäÖĞµÄ×Ö·ûµÄ¿í¶ÈÎªWidth£¬¸ß¶ÈÎªHight£¬
-¸Ã×Ö·ûÊµ¼ÊËùĞèµÄµãÕó¿í¶ÈÎªRealWidth ,
-CharRealWidth Ö÷ÒªÓÃÀ´ÔÚ¶à×Ö·ûÏÔÊ¾Ê±µÄ¿í¶È
-ÒòÎªÓĞÊ±µãÕóºÍ×Ö½Ú¿í¶È²»Æ¥Åä*/
+/* å‡½æ•°æè¿°:
+å¾—åˆ°æŸä¸ªå­—ç¬¦çš„ç‚¹é˜µï¼Œæ”¾åœ¨DestBufé‡Œï¼Œ
+å…¶ä¸­çš„å­—ç¬¦çš„å®½åº¦ä¸ºWidthï¼Œé«˜åº¦ä¸ºHightï¼Œ
+è¯¥å­—ç¬¦å®é™…æ‰€éœ€çš„ç‚¹é˜µå®½åº¦ä¸ºRealWidth ,
+CharRealWidth ä¸»è¦ç”¨æ¥åœ¨å¤šå­—ç¬¦æ˜¾ç¤ºæ—¶çš„å®½åº¦
+å› ä¸ºæœ‰æ—¶ç‚¹é˜µå’Œå­—èŠ‚å®½åº¦ä¸åŒ¹é…*/
 void GUIPROP_FillAreaChar(HI_U16 c, HI_U16 *DestBuf, HI_U8 *Width, HI_U8 *Hight, HI_U8 *CharRealWidth)
 {
     int BytesPerLine, i, j, usCount;
@@ -1108,12 +1108,12 @@ void GUIPROP_FillAreaString(HI_U8 *p ,HI_U8 Length, HI_U16 *TotalDotWidth, HI_U1
     usTotalWidth = 0;
     for(ucNum=0; ucNum<Length; ucNum++, p++)
     {
-        if (*p > 0x7f)/* Ó¢ÎÄ×Ö·û */
+        if (*p > 0x7f)/* è‹±æ–‡å­—ç¬¦ */
         {
             usTemp = ((HI_U16)*p << 8) + (HI_U16)*(p+ 1);
             ucFlag = HI_TRUE;
         }
-        else/* ÖĞÎÄ×Ö·û */
+        else/* ä¸­æ–‡å­—ç¬¦ */
         {
             usTemp = (HI_U16) *p;
             ucFlag = HI_FALSE;
@@ -1123,11 +1123,11 @@ void GUIPROP_FillAreaString(HI_U8 *p ,HI_U8 Length, HI_U16 *TotalDotWidth, HI_U1
         {
             for (usWidthCount = 0; usWidthCount < usCharDotWidth; usWidthCount++)
             {
-                if(HI_TRUE == ucFlag)/* Ó¢ÎÄ×Ö·û */
+                if(HI_TRUE == ucFlag)/* è‹±æ–‡å­—ç¬¦ */
                 {
                     gusShowBitmap[usHightCount][usWidthCount + ucNum * usCharRealWidth / 2] = ConvertBit[usWidthCount +  usHightCount * usCharDotWidth];
                 }
-                else/* ÖĞÎÄ×Ö·û */
+                else/* ä¸­æ–‡å­—ç¬¦ */
                 {
                     gusShowBitmap[usHightCount][usWidthCount + ucNum * usCharRealWidth] = ConvertBit[usWidthCount +  usHightCount * usCharDotWidth];
                 }
@@ -1164,7 +1164,7 @@ void* SAMPLE_Hifb_Region_VENC_Proc(void* p)
     BITMAP_S stBitmap;
     SAMPLE_RGN_CHANGE_TYPE_EN enChangeType;
     HI_BOOL bShow = HI_FALSE;
-    //ÕâÑù×î´óµÄ×Ö²»ÄÜ³¬¹ı50ĞĞ
+    //è¿™æ ·æœ€å¤§çš„å­—ä¸èƒ½è¶…è¿‡50è¡Œ
     HI_U16 finaldata[40][400] = {0};
     HI_U16 ShowWidth = 0,ShowRows = 0;
     HI_U32 length = 0, maxrow = 0, width = 0;
@@ -1182,17 +1182,17 @@ void* SAMPLE_Hifb_Region_VENC_Proc(void* p)
     
     
     /**************************************
-    Ìí¼Ó×Ö¿âµÄÎÄ¼ş
+    æ·»åŠ å­—åº“çš„æ–‡ä»¶
     *******************************************/
     int last_sec = 0;
     struct tm *tmnow;
     struct timeval tv;
-    /**************************************»ñµÃÊ±¼äÊı¾İ***************************/
+    /**************************************è·å¾—æ—¶é—´æ•°æ®***************************/
     gettimeofday(&tv,NULL);
     tmnow = localtime(&tv.tv_sec);
 
-    /* ´´½¨ÁË°Ë¸ö²»Í¬µÄ·½¿éÇøÓò*/
-    //´´½¨ÁË°Ë¸ö²»Í¬µÄ·½¿éÇøÓò
+    /* åˆ›å»ºäº†å…«ä¸ªä¸åŒçš„æ–¹å—åŒºåŸŸ*/
+    //åˆ›å»ºäº†å…«ä¸ªä¸åŒçš„æ–¹å—åŒºåŸŸ
     for (i = 0; i< gs_s32RgnCnt; i++)
     {
         OverlayExHandle  = i;
@@ -1284,7 +1284,7 @@ void* SAMPLE_Hifb_Region_VENC_Proc(void* p)
         printf("enter the loop... \n");
         
         GUIPROP_FillAreaString(osdcontent, strlen(osdcontent), &totalWidth, &totalHight);
-        //½«Í¼ÏñÊı¾İ×öµ½ĞĞ¶ÔÆë½øĞĞÊı¾İµÄ¶ş´Î¿½±´
+        //å°†å›¾åƒæ•°æ®åšåˆ°è¡Œå¯¹é½è¿›è¡Œæ•°æ®çš„äºŒæ¬¡æ‹·è´
         for (num = 0; num < totalHight; num++)
         {
             memcpy(finaldata[num], gusShowBitmap[num], totalWidth * 2);
@@ -1728,7 +1728,7 @@ HI_S32 SAMPLE_VIO_8_D1(PIC_SIZE_E enCodeSize, HI_U8 EncMode, VO_DEV VoDevMode)
         goto END_VENC_8D1_3;
     }
     printf("please press any key to exit\n");
-    /* Êä³öÏÔÊ¾ */
+    /* è¾“å‡ºæ˜¾ç¤º */
     if (SAMPLE_VO_DEV_DHD0 == VoDevMode)
     {
         VpssChn_VoHD0 = VPSS_PRE0_CHN;
@@ -1829,7 +1829,7 @@ HI_S32 SAMPLE_VIO_8_D1(PIC_SIZE_E enCodeSize, HI_U8 EncMode, VO_DEV VoDevMode)
         {
             enVoMode = VO_MODE_9MUX;
         }
-        else if  ('3' == ch)/* ½âÂë¿ªÊ¼ */
+        else if  ('3' == ch)/* è§£ç å¼€å§‹ */
         {
             enVoMode = VO_MODE_9MUX;
             if (SAMPLE_VO_DEV_DHD0 == VoDevMode)
@@ -4553,7 +4553,7 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb(PIC_SIZE_E enCodeSize, HI_U8 EncMode, VO_DEV VoDevMo
         goto END_VENC_8D1_3;
     }
     printf("please press any key to exit\n");
-    /* Êä³öÏÔÊ¾ */
+    /* è¾“å‡ºæ˜¾ç¤º */
     if (SAMPLE_VO_DEV_DHD0 == VoDevMode)
     {
         VpssChn_VoHD0 = VPSS_PRE0_CHN;
@@ -4654,7 +4654,7 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb(PIC_SIZE_E enCodeSize, HI_U8 EncMode, VO_DEV VoDevMo
         {
             enVoMode = VO_MODE_9MUX;
         }
-        else if  ('3' == ch)/* ½âÂë¿ªÊ¼ */
+        else if  ('3' == ch)/* è§£ç å¼€å§‹ */
         {
             pthread_join(gs_RegionVencPid,0);
             enVoMode = VO_MODE_9MUX;
@@ -4779,19 +4779,19 @@ END_8D1_0:  //system exit
 
 
 
-/* ÒÔÏÂÎªÊÓÆµ´¦ÀíµÄ·â×°ºóµÄº¯Êı */
+/* ä»¥ä¸‹ä¸ºè§†é¢‘å¤„ç†çš„å°è£…åçš„å‡½æ•° */
 #define ENPAYLOAD_INVALID  0xff  
 
-#define ENCODE_VPASSGRP_START  0 /* ±àÂëËùÓÃµÄVPSSµÄGRP´Ó0--15 */
-#define SNAP_VPASSGRP_START  16  /* ×¥ÅÄËùÓÃµÄVPSSµÄGRP´Ó16--23 */
-#define DECODE_VPASSGRP_START  24  /* ½âÂëËùÓÃµÄVPSSµÄGRP´Ó24--40 */
+#define ENCODE_VPASSGRP_START  0 /* ç¼–ç æ‰€ç”¨çš„VPSSçš„GRPä»0--15 */
+#define SNAP_VPASSGRP_START  16  /* æŠ“æ‹æ‰€ç”¨çš„VPSSçš„GRPä»16--23 */
+#define DECODE_VPASSGRP_START  24  /* è§£ç æ‰€ç”¨çš„VPSSçš„GRPä»24--40 */
 #define VPASSGRP_MAX   40  
 
-#define SNAP_ENCODE_CNT   8  /* ×¥ÅÄËùÓÃµÄ±àÂëÍ¨µÀ */
-#define SNAP_ENCODE_GRP   8  /* ×¥ÅÄËùÓÃµÄ±àÂë×é */
+#define SNAP_ENCODE_CNT   8  /* æŠ“æ‹æ‰€ç”¨çš„ç¼–ç é€šé“ */
+#define SNAP_ENCODE_GRP   8  /* æŠ“æ‹æ‰€ç”¨çš„ç¼–ç ç»„ */
 
 
-/* ±àÂëÍ¨µÀ */
+/* ç¼–ç é€šé“ */
 typedef enum
 {
     ENC_VPSS_GRP_1 = 1,
@@ -4806,7 +4806,7 @@ typedef enum
 }ENCODE_VPSS_GRP_E;
 
 
-/* ½âÂëÍ¨µÀ */
+/* è§£ç é€šé“ */
 #define DECODE_CHANNEL_1     1
 #define DECODE_CHANNEL_2     2
 #define DECODE_CHANNEL_3     3
@@ -4827,14 +4827,14 @@ SAMPLE_VI_MODE_E geEnViMode;
 VB_CONF_S gsVbConf;
 
 /***************************************************************
-*Ãû³Æ: void Hal_VariableInit(VB_CONF_S *p, HI_U32 u32ViChnCnt, PIC_SIZE_E enCodeSize)
+*åç§°: void Hal_VariableInit(VB_CONF_S *p, HI_U32 u32ViChnCnt, PIC_SIZE_E enCodeSize)
 
-*ÃèÊö: Ó²¼ş³éÏó²ãÊÓÆµµÄ²ÎÊı³õÊ¼»¯
-*Êä³ö:  ÎŞ
-*ĞŞ¸Ä¼ÇÂ¼:
+*æè¿°: ç¡¬ä»¶æŠ½è±¡å±‚è§†é¢‘çš„å‚æ•°åˆå§‹åŒ–
+*è¾“å‡º:  æ— 
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-  ÕÅ²©°®      2015-06-12         ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+  å¼ åšçˆ±      2015-06-12         åˆ›å»ºå‡½æ•°
 ****************************************************************/
 void Hal_VariableInit(HI_U32 u32ViChnCnt, PIC_SIZE_E enCodeSize)
 {
@@ -4844,7 +4844,7 @@ void Hal_VariableInit(HI_U32 u32ViChnCnt, PIC_SIZE_E enCodeSize)
     
     gs_u32ViFrmRate = (VIDEO_ENCODING_MODE_PAL == gs_enNorm) ? 25 : 30;
 
-    /* ¸ù¾İÊÓÆµ·Ö±æÂÊµÃ³öËùĞèµÄblksize */
+    /* æ ¹æ®è§†é¢‘åˆ†è¾¨ç‡å¾—å‡ºæ‰€éœ€çš„blksize */
     uiBlkSize = SAMPLE_COMM_SYS_CalcPicVbBlkSize(gs_enNorm,\
                             enCodeSize, SAMPLE_PIXEL_FORMAT, SAMPLE_SYS_ALIGN_WIDTH);
 
@@ -4946,7 +4946,7 @@ HI_S32 Hal_VencRelese(HI_S32 VencChn,
 {
     HI_S32 s32VencGrp, s32VpssGrp, s32Ret,s32VencChn; 
     
-    /* ÎŞ×ÓÂëÁ÷Ê± */
+    /* æ— å­ç æµæ—¶ */
     if (ENPAYLOAD_INVALID == SubEnPayLoad)
     {
         s32VencChn = VencChn * 2;
@@ -4980,25 +4980,25 @@ HI_S32 Hal_VencRelese(HI_S32 VencChn,
 }
 
 /***************************************************************
-*Ãû³Æ: Hal_VencSet(HI_S32 VencChn, 
+*åç§°: Hal_VencSet(HI_S32 VencChn, 
                                 SAMPLE_RC_E EncMode, 
                                 PAYLOAD_TYPE_E MainEnPayLoad,
                                 PAYLOAD_TYPE_E SubEnPayLoad,
                                 PIC_SIZE_E MainEnSize,
                                 PIC_SIZE_E SubEnSize
                                 )
-*ÃèÊö: Ó²¼ş³éÏó²ã±àÂëÆ÷µÄÉèÖÃ
-*ÊäÈë:   HI_S32 VencChn----±àÂëÍ¨µÀ
-                SAMPLE_RC_E EncMode----±àÂëµÄÄ£Ê½:CBR, VBR
-                PAYLOAD_TYPE_E MainEnPayLoad----Ö÷ÂëÁ÷·½Ê½
-                PAYLOAD_TYPE_E SubEnPayLoad-----´ÓÂëÁ÷·½Ê½
-                PIC_SIZE_E MainEnSize------Ö÷ÂëÁ÷´óĞ¡
-                PIC_SIZE_E SubEnSize-------´ÓÂëÁ÷´óĞ¡
-*Êä³ö:  ¸ÃÍ¨µÀÉèÖÃ×´Ì¬
-*ĞŞ¸Ä¼ÇÂ¼:
+*æè¿°: ç¡¬ä»¶æŠ½è±¡å±‚ç¼–ç å™¨çš„è®¾ç½®
+*è¾“å…¥:   HI_S32 VencChn----ç¼–ç é€šé“
+                SAMPLE_RC_E EncMode----ç¼–ç çš„æ¨¡å¼:CBR, VBR
+                PAYLOAD_TYPE_E MainEnPayLoad----ä¸»ç æµæ–¹å¼
+                PAYLOAD_TYPE_E SubEnPayLoad-----ä»ç æµæ–¹å¼
+                PIC_SIZE_E MainEnSize------ä¸»ç æµå¤§å°
+                PIC_SIZE_E SubEnSize-------ä»ç æµå¤§å°
+*è¾“å‡º:  è¯¥é€šé“è®¾ç½®çŠ¶æ€
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-  ÕÅ²©°®      2015-06-12         ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+  å¼ åšçˆ±      2015-06-12         åˆ›å»ºå‡½æ•°
 ****************************************************************/
 HI_S32 Hal_VencSet(HI_S32 VencChn, 
                                 SAMPLE_RC_E EncMode, 
@@ -5010,7 +5010,7 @@ HI_S32 Hal_VencSet(HI_S32 VencChn,
 {
     HI_S32 s32VencGrp, s32VpssGrp, s32Ret,s32VencChn; 
 
-    /* Ã»ÓĞ×ÓÂëÁ÷Ê± */
+    /* æ²¡æœ‰å­ç æµæ—¶ */
     if (ENPAYLOAD_INVALID == SubEnPayLoad)
     {
         /*** main stream **/
@@ -5111,10 +5111,10 @@ HI_S32 Hal_VencRegionOsd(HI_S32 VencChn)
 
 HI_S32 Hal_VoParaInit(VO_DEV VoDevType, SAMPLE_VO_MODE_E eVoMode) 
 {
-    /* °ÑÊä³öµÄ²ÎÊıÇå¿Õ */
+    /* æŠŠè¾“å‡ºçš„å‚æ•°æ¸…ç©º */
     memset(&gstVoPubAttr, 0x00, sizeof(VO_PUB_ATTR_S));
     
-    /* ÉèÖÃÊä³öµÄ²ÎÊı */
+    /* è®¾ç½®è¾“å‡ºçš„å‚æ•° */
     if (SAMPLE_VO_DEV_DHD0 == VoDevType)
     {
         giVpssChn_VoHD0 = VPSS_PRE1_CHN;
@@ -5155,7 +5155,7 @@ HI_S32 Hal_VoParaInit(VO_DEV VoDevType, SAMPLE_VO_MODE_E eVoMode)
         gstVoPubAttr.bDoubleFrame = HI_FALSE;
     }
 
-	/* ´°¿ÚµÄÊıÁ¿ */
+	/* çª—å£çš„æ•°é‡ */
     if (VO_MODE_1MUX == eVoMode)
     {
         guiWndNum = 1;
@@ -5181,7 +5181,7 @@ HI_S32 Hal_VoBindVpss(VO_DEV VoDevMode, SAMPLE_VO_MODE_E eVoMode)
     VO_CHN VoChn;
     VO_DEV VoDev = VoDevMode;
 
-    /* °ó¶¨VPSSºÍVO */
+    /* ç»‘å®šVPSSå’ŒVO */
     for (i = 0; i < guiWndNum; i++)
     {
         VoChn = i ;/* out channel 0-----vpss 7 */
@@ -5201,7 +5201,7 @@ HI_S32 Hal_VoUnBindVpss(VO_DEV VoDevMode, SAMPLE_VO_MODE_E eVoMode)
     VO_CHN VoChn;
     VO_DEV VoDev = VoDevMode;
 
-    /* ½â³ı°ó¶¨VPSSºÍVO */
+    /* è§£é™¤ç»‘å®šVPSSå’ŒVO */
     for (i = 0; i < guiWndNum; i++)
     {
         VoChn = i ;/* out channel 0-----vpss 7 */
@@ -5222,7 +5222,7 @@ HI_S32 Hal_VoBindVi(VO_DEV VoDevMode, SAMPLE_VO_MODE_E eVoMode)
     VO_DEV VoDev = VoDevMode;
     VI_CHN  ViChn;
 
-    /* °ó¶¨VIºÍVO */
+    /* ç»‘å®šVIå’ŒVO */
     for (i = 0; i < guiWndNum; i++)
     {
         VoChn = i ; 
@@ -5242,7 +5242,7 @@ HI_S32 Hal_VoUnBindVi(VO_DEV VoDevMode, SAMPLE_VO_MODE_E eVoMode)
     VO_CHN VoChn;
     VO_DEV VoDev = VoDevMode;
 
-    /* ½â³ı°ó¶¨VIºÍVO */
+    /* è§£é™¤ç»‘å®šVIå’ŒVO */
     for (i = 0; i < guiWndNum; i++)
     {
         VoChn = i ;/* out channel 0-----vpss 7 */
@@ -5490,9 +5490,9 @@ HI_S32 Hal_DecSet(PAYLOAD_TYPE_E enType, HI_S32 s32Cnt, VO_DEV VoDev)
         }
     }
 
-    /* VOµÄ²Ù×÷£¬°ó¶¨VPSS»òÕßVDECµ½VO */		
-    /* Èç¹ûVOÎªHD£¬VO ------VPSS 
-        Èç¹ûVOÎªSD£¬VO -----VDEC */  
+    /* VOçš„æ“ä½œï¼Œç»‘å®šVPSSæˆ–è€…VDECåˆ°VO */		
+    /* å¦‚æœVOä¸ºHDï¼ŒVO ------VPSS 
+        å¦‚æœVOä¸ºSDï¼ŒVO -----VDEC */  
     for (i = 0; i < u32WndNum; i++)
     {
         VoChn = i;
@@ -5511,7 +5511,7 @@ HI_S32 Hal_DecSet(PAYLOAD_TYPE_E enType, HI_S32 s32Cnt, VO_DEV VoDev)
 
     return HI_SUCCESS;
 
-    /* ³ö´í´¦Àí */
+    /* å‡ºé”™å¤„ç† */
 END_3:
     Hal_DecRelese(s32Cnt, VoDev);
     return HI_FAILURE;
@@ -5546,7 +5546,7 @@ HI_S32 Vedio_ViBindVpss(SAMPLE_VI_MODE_E EnViMode)
 
 HI_S32 Vedio_VoSet(VO_DEV VoDevType, SAMPLE_VO_MODE_E eVoMode)
 {
-    /* ÉèÖÃÊä³öµÄ°ó¶¨¹ØÏµ */
+    /* è®¾ç½®è¾“å‡ºçš„ç»‘å®šå…³ç³» */
     if (SAMPLE_VO_DEV_DHD0 == VoDevType)
     {
         Hal_VoBindVpss(VoDevType, eVoMode);
@@ -5559,7 +5559,7 @@ HI_S32 Vedio_VoSet(VO_DEV VoDevType, SAMPLE_VO_MODE_E eVoMode)
 
 HI_S32 Vedio_VoRelease(VO_DEV VoDevType, SAMPLE_VO_MODE_E eVoMode)
 {    
-    /* ½â³ıÊä³öµÄ°ó¶¨¹ØÏµ */
+    /* è§£é™¤è¾“å‡ºçš„ç»‘å®šå…³ç³» */
     if (SAMPLE_VO_DEV_DHD0 == VoDevType)
     {
         Hal_VoUnBindVpss(VoDevType, eVoMode);
@@ -5589,7 +5589,7 @@ HI_S32 Vedio_Vo(VO_DEV VoDevMode, SAMPLE_VO_MODE_E eVoMode, SAMPLE_VO_MODE_E ePr
             goto END_8D1_4;
         }
 
-        /* ÉèÖÃÊä³öµÄ°ó¶¨¹ØÏµ */
+        /* è®¾ç½®è¾“å‡ºçš„ç»‘å®šå…³ç³» */
         if (SAMPLE_VO_DEV_DHD0 == VoDevMode)
         {
             s32Ret = Hal_VoBindVpss(VoDevMode, eVoMode);
@@ -5691,7 +5691,7 @@ HI_S32 Vedio_Vdec_Process(PIC_SIZE_E enPicSize, PAYLOAD_TYPE_E enType, HI_S32 s3
 
 
     /******************************************
-     step 1: ½âÂëËùĞèµÄ²ÎÊı³õÊ¼»¯
+     step 1: è§£ç æ‰€éœ€çš„å‚æ•°åˆå§‹åŒ–
     ******************************************/
     s32Ret = Hal_DecParaInit(enPicSize, s32Cnt);
     if (HI_SUCCESS != s32Ret)
@@ -5700,7 +5700,7 @@ HI_S32 Vedio_Vdec_Process(PIC_SIZE_E enPicSize, PAYLOAD_TYPE_E enType, HI_S32 s3
     }
 
     /******************************************
-     step 2: ½âÂëÆ÷Ó²¼şÉèÖÃ
+     step 2: è§£ç å™¨ç¡¬ä»¶è®¾ç½®
     ******************************************/
     s32Ret = Hal_DecSet(enType, s32Cnt, VoDev);
     if (HI_SUCCESS != s32Ret)
@@ -5709,7 +5709,7 @@ HI_S32 Vedio_Vdec_Process(PIC_SIZE_E enPicSize, PAYLOAD_TYPE_E enType, HI_S32 s3
     }
     
     /******************************************
-     step 3: ²Ù×÷½âÂëÎÄ¼şÏµÍ³//open file & video decoder
+     step 3: æ“ä½œè§£ç æ–‡ä»¶ç³»ç»Ÿ//open file & video decoder
     ******************************************/
     for (i=0; i<s32Cnt; i++)
     {
@@ -5727,7 +5727,7 @@ HI_S32 Vedio_Vdec_Process(PIC_SIZE_E enPicSize, PAYLOAD_TYPE_E enType, HI_S32 s3
     }
     
     /******************************************
-     step 4: ½âÂëÍê³É,½áÊø½âÂëÏß³Ì//join thread
+     step 4: è§£ç å®Œæˆ,ç»“æŸè§£ç çº¿ç¨‹//join thread
     ******************************************/
     for (i = 0; i < s32Cnt; i++)
     {
@@ -5737,21 +5737,21 @@ HI_S32 Vedio_Vdec_Process(PIC_SIZE_E enPicSize, PAYLOAD_TYPE_E enType, HI_S32 s3
 
     
     /******************************************
-     step 5: ´¦ÀíÍê³É£¬ÊÍ·Å×ÊÔ´//Unbind vdec to vpss & destroy vdec-chn
+     step 5: å¤„ç†å®Œæˆï¼Œé‡Šæ”¾èµ„æº//Unbind vdec to vpss & destroy vdec-chn
     ******************************************/
     Hal_DecRelese(s32Cnt, VoDev);    
     return HI_SUCCESS;
 }
 
 /***************************************************************
-*Ãû³Æ: HI_S32 Hal_SnapInit(PIC_SIZE_E e_pic_size)
-*ÃèÊö: Ó²¼ş³éÏó²ã×¥ÅÄµÄ³õÊ¼»¯
-*ÊäÈë:  ×¥ÅÄµÄÍ¼Æ¬µÄ´óĞ¡
-*Êä³ö:  ÎŞ
-*ĞŞ¸Ä¼ÇÂ¼:
+*åç§°: HI_S32 Hal_SnapInit(PIC_SIZE_E e_pic_size)
+*æè¿°: ç¡¬ä»¶æŠ½è±¡å±‚æŠ“æ‹çš„åˆå§‹åŒ–
+*è¾“å…¥:  æŠ“æ‹çš„å›¾ç‰‡çš„å¤§å°
+*è¾“å‡º:  æ— 
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-  ÕÅ²©°®      2015-06-12         ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+  å¼ åšçˆ±      2015-06-12         åˆ›å»ºå‡½æ•°
 ****************************************************************/
 HI_S32 Hal_SnapInit(PIC_SIZE_E e_pic_size)
 {    
@@ -5778,14 +5778,14 @@ HI_S32 Hal_SnapInit(PIC_SIZE_E e_pic_size)
 }
 
 /***************************************************************
-*Ãû³Æ: HI_S32 Hal_Snap(HI_S32 ViChannel)
-*ÃèÊö: Ó²¼ş³éÏó²ã×¥ÅÄ 
-*ÊäÈë:  Í¨µÀºÅ
-*Êä³ö:  ÎŞ
-*ĞŞ¸Ä¼ÇÂ¼:
+*åç§°: HI_S32 Hal_Snap(HI_S32 ViChannel)
+*æè¿°: ç¡¬ä»¶æŠ½è±¡å±‚æŠ“æ‹ 
+*è¾“å…¥:  é€šé“å·
+*è¾“å‡º:  æ— 
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-  ÕÅ²©°®      2015-06-12         ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+  å¼ åšçˆ±      2015-06-12         åˆ›å»ºå‡½æ•°
 ****************************************************************/
 HI_S32 Hal_Snap(HI_S32 ViChannel)
 {
@@ -5960,17 +5960,17 @@ END_VENC_SNAP_0:    //system exit
 
  
 /***************************************************************
-*Ãû³Æ: void SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, HI_U8 EncMode, VO_DEV VoDevMode)
-*ÃèÊö: ´øÇøÓòµş¼ÓµÄ±àÂë
-*ÊäÈë:   SAMPLE_VI_MODE_E enViMode ----±àÂëÊäÈë·½Ê½
-                 PIC_SIZE_E enCodeSize -------±àÂë´óĞ¡
-                 HI_U8 EncMode-------±àÂë·½Ê½£¬CBR»òÕßVBR
-                 VoDevMode----------Êä³öÏÔÊ¾·½Ê½
-*Êä³ö:  ÎŞ  
-*ĞŞ¸Ä¼ÇÂ¼
+*åç§°: void SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, HI_U8 EncMode, VO_DEV VoDevMode)
+*æè¿°: å¸¦åŒºåŸŸå åŠ çš„ç¼–ç 
+*è¾“å…¥:   SAMPLE_VI_MODE_E enViMode ----ç¼–ç è¾“å…¥æ–¹å¼
+                 PIC_SIZE_E enCodeSize -------ç¼–ç å¤§å°
+                 HI_U8 EncMode-------ç¼–ç æ–¹å¼ï¼ŒCBRæˆ–è€…VBR
+                 VoDevMode----------è¾“å‡ºæ˜¾ç¤ºæ–¹å¼
+*è¾“å‡º:  æ—   
+*ä¿®æ”¹è®°å½•
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-  ÕÅ²©°®      2016-06-10          ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+  å¼ åšçˆ±      2016-06-10          åˆ›å»ºå‡½æ•°
 ****************************************************************/
 HI_S32 SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, HI_U8 EncMode, VO_DEV VoDevMode)
 {
@@ -5994,12 +5994,12 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, H
     SIZE_S stSize;
     
     /******************************************
-     step  1: ²ÎÊı³õÊ¼»¯
+     step  1: å‚æ•°åˆå§‹åŒ–
     ******************************************/
     Vedio_VariableInit(u32ViChnCnt, enCodeSize);
 
     /******************************************
-     step 2: ÏµÍ³³õÊ¼»¯
+     step 2: ç³»ç»Ÿåˆå§‹åŒ–
     ******************************************/
     s32Ret = Vedio_Init(gsVbConf);
     if (HI_SUCCESS != s32Ret)
@@ -6008,7 +6008,7 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, H
     }
     
     /******************************************
-     step 3: VI ³õÊ¼»¯
+     step 3: VI åˆå§‹åŒ–
     ******************************************/
     s32Ret = Vedio_ViInit(enViMode);
     if (HI_SUCCESS != s32Ret)
@@ -6017,7 +6017,7 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, H
     }
      
     /******************************************
-     step 4: VPSS³õÊ¼»¯
+     step 4: VPSSåˆå§‹åŒ–
     ******************************************/
     s32Ret = Vedio_VpssInit(enViMode, s32VpssGrpCnt, enSize);
     if (HI_SUCCESS != s32Ret)
@@ -6026,7 +6026,7 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, H
     }
     
     /******************************************
-     step 5: VI°ó¶¨VPSS
+     step 5: VIç»‘å®šVPSS
     ******************************************/
     s32Ret = Vedio_ViBindVpss(enViMode);
     if (HI_SUCCESS != s32Ret)
@@ -6065,7 +6065,7 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, H
     enVoMode = VO_MODE_9MUX;
     enPreVoMode = enVoMode;
     
-    /* Êä³öÏÔÊ¾ */
+    /* è¾“å‡ºæ˜¾ç¤º */
     Vedio_Vo(VoDevMode, enVoMode, enPreVoMode);
 
 
@@ -6110,7 +6110,7 @@ HI_S32 SAMPLE_VIO_8_D1_Hifb1(SAMPLE_VI_MODE_E enViMode, PIC_SIZE_E enCodeSize, H
             enVoMode = VO_MODE_9MUX;
             Vedio_Vo(VoDevMode, enVoMode, enPreVoMode);
         }
-        else if  ('3' == ch)/* ½âÂë¿ªÊ¼ */
+        else if  ('3' == ch)/* è§£ç å¼€å§‹ */
         {
             Vedio_VoRelease(VoDevMode, enVoMode);
             

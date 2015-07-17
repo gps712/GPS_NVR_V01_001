@@ -523,14 +523,14 @@ AUDIO_RESAMPLE_ATTR_S gs_AoReSampleAttr;
 AIO_ATTR_S gs_HdmiAoAttr;
 
 /***************************************************************
-*Ãû³Æ: void audio_variableinit(VB_CONF_S *p, HI_U32 u32ViChnCnt, PIC_SIZE_E enCodeSize)
+*åç§°: void audio_variableinit(VB_CONF_S *p, HI_U32 u32ViChnCnt, PIC_SIZE_E enCodeSize)
 
-*ÃèÊö: ÒôÆµµÄ²ÎÊı³õÊ¼»¯
-*Êä³ö:  ÎŞ
-*ĞŞ¸Ä¼ÇÂ¼:
+*æè¿°: éŸ³é¢‘çš„å‚æ•°åˆå§‹åŒ–
+*è¾“å‡º:  æ— 
+*ä¿®æ”¹è®°å½•:
 *----------------------------------------
-*ĞŞ¸ÄÈË      ĞŞ¸ÄÊ±¼ä     ĞŞ¸ÄÄÚÈİ
-  ÕÅ²©°®      2015-06-12         ´´½¨º¯Êı
+*ä¿®æ”¹äºº      ä¿®æ”¹æ—¶é—´     ä¿®æ”¹å†…å®¹
+  å¼ åšçˆ±      2015-06-12         åˆ›å»ºå‡½æ•°
 ****************************************************************/
 HI_U32 audio_variableinit(void)
 {  
@@ -548,14 +548,14 @@ HI_U32 audio_variableinit(void)
     }
 
     /* init stAio. all of cases will use it */
-    gs_AioAttr.enSamplerate = AUDIO_SAMPLE_RATE_8000;/* 8KµÄ²ÉÑùËÙÂÊ */
-    gs_AioAttr.enBitwidth = AUDIO_BIT_WIDTH_16;/* 16Î» */
+    gs_AioAttr.enSamplerate = AUDIO_SAMPLE_RATE_8000;/* 8Kçš„é‡‡æ ·é€Ÿç‡ */
+    gs_AioAttr.enBitwidth = AUDIO_BIT_WIDTH_16;/* 16ä½ */
     gs_AioAttr.enWorkmode = AIO_MODE_I2S_SLAVE;
-    gs_AioAttr.enSoundmode = AUDIO_SOUND_MODE_MONO;/* µ¥¶Ë */
+    gs_AioAttr.enSoundmode = AUDIO_SOUND_MODE_MONO;/* å•ç«¯ */
     gs_AioAttr.u32EXFlag = 1;
     gs_AioAttr.u32FrmNum = 30;
     gs_AioAttr.u32PtNumPerFrm = SAMPLE_AUDIO_PTNUMPERFRM;
-    gs_AioAttr.u32ChnCnt = 8;/* 5Â·ÒôÆµÍ¬Ê±Â¼Òô */
+    gs_AioAttr.u32ChnCnt = 8;/* 5è·¯éŸ³é¢‘åŒæ—¶å½•éŸ³ */
     gs_AioAttr.u32ClkSel = 0;
 
     /* config ao resample attr if needed */
