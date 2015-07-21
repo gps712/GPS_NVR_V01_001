@@ -342,21 +342,6 @@ void* store_thread_proc(void *p)
 	
 	pt_para = (st_gps_thread_param*)p;
 
-    /*
-    pipe_fd = open(FIFO_NAME, O_RDWR | O_NONBLOCK);
-    
-	
-	printf("open=%d\n",pipe_fd);
-    if( pipe_fd==-1 )
-    {
-        printf("open pipe erro!");
-        return;
-    }
-	else
-	{
-		printf("open pipe ok!");
-	}
-	*/
 	pipe_fd = gt_store_fifo_fd;
 	
     FD_ZERO(&readfds);
