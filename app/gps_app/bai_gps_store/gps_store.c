@@ -415,7 +415,7 @@ int store_fifo_write( char *p)
 	//pt_para->thread_start = FALSE;
 	if(gt_store_fifo_fd>0)
 	{
-		i_size=write(gt_store_fifo_fd,p,sizeof(p));
+		i_size=write(gt_store_fifo_fd,p,strlen(p));
 		if(i_size < 0)
 		{
 			//printf("%s: ERROR1!\n" __FUNCTION__);
