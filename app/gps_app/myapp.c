@@ -57,7 +57,7 @@ int my_system1(const char *cmd_line)
 	return ret; 
 } 
 
-int my_system2(const char * cmd) 
+static int my_system2(const char * cmd) 
 { 
 	FILE * fp; 
 	int res; char buf[1024]; 

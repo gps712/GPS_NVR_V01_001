@@ -91,6 +91,21 @@ MYTIME mytime_from_bcd( uint8_t* buf )
 	return MYDATETIME( year, month, day, hour, minute, sec );
 }
 
+/*转换bcd时间*/
+unsigned long utc_from_bcd( uint8_t* buf )
+{
+	uint32_t year, month, day, hour, minute, sec;
+	uint8_t *psrc = buf;
+	
+	year	= BCD2HEX( *psrc++ );
+	month	= BCD2HEX( *psrc++ );
+	day		= BCD2HEX( *psrc++ );
+	hour	= BCD2HEX( *psrc++ );
+	minute	= BCD2HEX( *psrc++ );
+	sec		= BCD2HEX( *psrc );
+	return mytime_to_utc(MYDATETIME( year, month, day, hour, minute, sec ));
+}
+
 /*转换为十六进制的时间 例如 2013/07/18 => 0x0d 0x07 0x12*/
 void mytime_to_hex( uint8_t* buf, MYTIME time )
 {
@@ -115,6 +130,20 @@ void mytime_to_bcd( uint8_t* buf, MYTIME time )
 	*psrc	= HEX2BCD( SEC( time ) );
 }
 
+
+/*转换为bcd字符串为自定义时间 例如 0x13 0x07 0x12=>代表 13年7月12日*/
+void utc_to_bcd( uint8_t* buf, unsigned long  utc_time )
+{
+	uint8_t *psrc = buf; 
+	MYTIME time;
+	time=utc_to_mytime(utc_time);
+	*psrc++ = HEX2BCD( YEAR( time ) );
+	*psrc++ = HEX2BCD( MONTH( time ) );
+	*psrc++ = HEX2BCD( DAY( time ) );
+	*psrc++ = HEX2BCD( HOUR( time ) );
+	*psrc++ = HEX2BCD( MINUTE( time ) );
+	*psrc	= HEX2BCD( SEC( time ) );
+}
 
 
 /*********************************************************************************

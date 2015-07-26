@@ -70,6 +70,133 @@ typedef struct _st_console_msg
 }st_console_msg;
 
 
+static int my_system2(const char * cmd) 
+{ 
+	FILE * fp; 
+	int res; char buf[1024]; 
+	if (cmd == NULL) 
+	{ 
+		printf("my_system cmd is NULL!\n");
+		return -1;
+	} 
+	if ((fp = popen(cmd, "r") ) == NULL) 
+	{ 
+		perror("popen");
+		printf("popen error: %s/n", strerror( 2 )); 
+		return -1; 
+	} 
+	else
+	{
+		while(fgets(buf, sizeof(buf), fp)) 
+		{ 
+			printf("%s", buf); 
+		} 
+		if ( (res = pclose(fp)) == -1) 
+		{ 
+			printf("close popen file pointer fp error!\n"); 
+			return res;
+		} 
+		else if (res == 0) 
+		{
+			return res;
+		} 
+		else 
+		{ 
+			printf("popen res is :%d\n", res); return res; 
+		} 
+	}
+} 
+
+
+int gps_send_cmd(char *cmd,char *rx_buf,int rx_max_len)
+{
+	int 		i,ret;
+    int			bytes_read;
+    int			pipe_fd;
+    int			res;
+	char 		name_gps_cmd[]="/tmp/gps_test_cmd_pipe";
+	char 		buffer[128];
+	
+	//remove(name_gps_cmd);
+    ret = mkfifo( name_gps_cmd, 0666 );
+	/*
+    if (ret == 0)
+	{
+		pipe_fd = open(name_gps_cmd, O_NONBLOCK | O_RDWR);
+		
+		printf("open=%d\n",pipe_fd);
+	    if( pipe_fd==-1 )
+	    {
+	        printf("open pipe erro!");
+	        goto RETT;
+	    }
+	} 
+	else
+    {
+		printf("创建管道失败!\n");
+		goto RETT;
+    }
+    */
+	pipe_fd = open(name_gps_cmd, O_NONBLOCK | O_RDWR);
+	sprintf(buffer,"%s > %s",cmd,name_gps_cmd);
+	write(pipe_fd,"\n",1);
+	//system(buffer);
+	my_system2(buffer);
+	write(pipe_fd,"\n",1);
+	//usleep(10);
+	bytes_read = 0;
+	do
+    {
+    	memset(buffer,0,sizeof(buffer));
+        res = read(pipe_fd, buffer, sizeof(buffer)-1);
+        if(((void *)rx_buf != 0)&&(rx_max_len>1))
+    	{
+			for(i=0;i<res;i++)
+			{
+				rx_buf[bytes_read++] = buffer[i];
+				if(bytes_read >= rx_max_len - 1)
+				{
+					rx_buf[bytes_read] = 0;
+					goto RETT;
+				}
+			}
+			rx_buf[bytes_read] = 0;
+    	}
+		else
+		{
+			printf(buffer);
+		}
+    }
+    while(res > 0);
+RETT:
+	close( pipe_fd );
+	return bytes_read;
+}
+
+
+/*********************************************************************************
+  *函数名称:void console_cmd( char *p, uint16_t len )
+  *功能描述:测试命令
+  *输	入: p		:传递的字符串
+  			len		:字符串长度
+  *输	出: none
+  *返 回 值:	0:OK  非0:错误
+  *---------------------------------------------------------------------------------
+  * @修改人		修改时间   	修改内容
+  * 白养民		2015-06-18	创建
+*********************************************************************************/
+void console_cmd( char *p, uint16_t len )
+{
+	char buf[1024];
+	gps_send_cmd(p,(char *)0,0);
+	/*
+	if(gps_send_cmd(p,buf,sizeof(buf)))
+	{
+		printf("\n%s",buf);
+	}
+	*/
+}
+
 
 /*********************************************************************************
   *函数名称:void console_rtc_set( char *p, uint16_t len )
@@ -299,6 +426,7 @@ int console_param_set2( char *p, uint16_t len )
 int store_fifo_test( char *p, uint16_t len )
 {
     int i_size;
+	char buf[128];
 	//pt_para->thread_start = FALSE;
 	if(gt_store_fifo_fd>0)
 	{
@@ -330,6 +458,7 @@ void* console_proc(void *p)
 {
     int i;
     char menuin[128];
+    char menuin_lower[128];
     st_gps_thread_param	*pt_para;
 	static const st_console_msg gt_console_msg[] =
 	{
@@ -342,8 +471,10 @@ void* console_proc(void *p)
 		{ "param_set2:", 	CONSOLE_MSG_STR_FUNC,	console_param_set2,	"设置参数", 			},		///
 		{ "disk:",			CONSOLE_MSG_STR_FUNC,	console_disk_test,	"磁盘测试",				},		///
 		{ "store:",			CONSOLE_MSG_STR_FUNC,	store_fifo_test,	"FIFO测试",				},		///
+		{ "cmd:",			CONSOLE_MSG_STR_FUNC,	console_cmd,		"shell cmd",			},		///
 		{ "rtc_set:",		CONSOLE_MSG_STR_FUNC,	console_rtc_set,	"rtc_set:120715133759",	},		///
-		{ "rtc_read",		CONSOLE_MSG_STR_FUNC,	console_rtc_read,	"读取RTC时间",				},		///
+		{ "rtc_read",		CONSOLE_MSG_STR_FUNC,	console_rtc_read,	"读取RTC时间",			},		///
+		{ "1234",			CONSOLE_MSG_STR_FUNC,	console_rtc_read,				"5678",		},		///
 	};
 	u32 uct_time;
 	MYTIME my_time;
@@ -405,15 +536,19 @@ void* console_proc(void *p)
 			//printf_hex_data(menuin,strlen(menuin));
 		    //printf("\n");
 		}
+		for(i=0;i<sizeof(menuin);i++)
+		{
+			menuin_lower[i] = tolower( menuin[i] );
+		}
 		///退出
-		if( strncmp(menuin, "exit" , 4) == 0 )
+		if( strncmp(menuin_lower, "exit" , 4) == 0 )
 		{
 			printf("退出线程\n");
 			pt_para->thread_start = FALSE;
 			return NULL;
 		}
 		///退出
-		if( strncmp(menuin, "help" , 4) == 0 )
+		if( strncmp(menuin_lower, "help" , 4) == 0 )
 		{
 			//{ 	"store:",			CONSOLE_MSG_STR_FUNC,	store_fifo_test,	"FIFO测试",				},		///
 			printf(		"       命令:               功能:\n");
@@ -431,7 +566,7 @@ void* console_proc(void *p)
 		///命令集循环判断
 		for( i = 0; i < sizeof( gt_console_msg ) / sizeof( st_console_msg ); i++ )
 		{
-			if( strncmp(menuin, gt_console_msg[i].rx_str, strlen(gt_console_msg[i].rx_str)) == 0)
+			if( strncmp(menuin_lower, gt_console_msg[i].rx_str, strlen(gt_console_msg[i].rx_str)) == 0)
 			{
 				if((gt_console_msg[i].type == CONSOLE_MSG_STR ) || (gt_console_msg[i].type == CONSOLE_MSG_STR_FUNC))
 				{

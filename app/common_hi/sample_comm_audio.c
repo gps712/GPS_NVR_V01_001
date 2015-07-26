@@ -1,3 +1,4 @@
+
 /******************************************************************************
   A simple program of Hisilicon HI3516 audio input/output/encoder/decoder implementation.
   Copyright (C), 2010-2011, Hisilicon Tech. Co., Ltd.

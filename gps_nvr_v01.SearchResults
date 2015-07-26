@@ -1,14 +1,5 @@
----- sample_comm.h Matches (13 in 12 files) ----
-Gps_audio.c (app\gps_app\jack_gps_video):#include "sample_comm.h"
-Gps_video.c (app\gps_app\jack_gps_video):#include "sample_comm.h"
-Gps_video.c (app\gps_app\jack_gps_video):#include "sample_comm.h"
-Myapp.c (app\gps_app):#include "sample_comm.h"
-Sample_comm_audio.c (app\common_hi):#include "sample_comm.h"
-Sample_comm_sys.c (app\common_hi):#include "sample_comm.h"
-Sample_comm_vda.c (app\common_hi):#include "sample_comm.h"
-Sample_comm_vdec.c (app\common_hi):#include "sample_comm.h"
-Sample_comm_venc.c (app\common_hi):#include "sample_comm.h"
-Sample_comm_vi.c (app\common_hi):#include "sample_comm.h"
-Sample_comm_vo.c (app\common_hi):#include "sample_comm.h"
-Sample_comm_vpss.c (app\common_hi):#include "sample_comm.h"
-Sample_venc.txt (app\gps_app\wxg_src):#include "sample_comm.h"
+---- store_close_channel_nvr Matches (4 in 1 files) ----
+Gps_store.c (app\gps_app\bai_gps_store):static int store_close_channel_nvr(u8 close_channel)
+Gps_store.c (app\gps_app\bai_gps_store):						store_close_channel_nvr( BIT(i) );
+Gps_store.c (app\gps_app\bai_gps_store):							store_close_channel_nvr( BIT(i) );
+Gps_store.c (app\gps_app\bai_gps_store):							store_close_channel_nvr( BIT(i) );

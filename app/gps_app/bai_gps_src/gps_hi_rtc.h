@@ -45,10 +45,13 @@ typedef uint32_t MYTIME;
 extern MYTIME mytime_from_hex( uint8_t* buf );
 /*转换bcd时间*/
 extern MYTIME mytime_from_bcd( uint8_t* buf );
+extern unsigned long utc_from_bcd( uint8_t* buf );
+
 /*转换为十六进制的时间 例如 2013/07/18 => 0x0d 0x07 0x12*/
 extern void mytime_to_hex( uint8_t* buf, MYTIME time );
 /*转换为bcd字符串为自定义时间 例如 0x13 0x07 0x12=>代表 13年7月12日*/
 extern void mytime_to_bcd( uint8_t* buf, MYTIME time );
+extern void utc_to_bcd( uint8_t* buf, unsigned long  utc_time );
 extern unsigned long mytime_to_utc(MYTIME	time);
 extern MYTIME utc_to_mytime(unsigned long utc);
 extern int rtc_init_time(void);

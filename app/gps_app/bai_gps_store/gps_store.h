@@ -20,16 +20,31 @@
 #include "hi_comm_video.h"
 #include <time.h>
 
-
 #define DF_STORE_AV_PACK_SIZE			0x10000		///每次处理的音视频包的大小
 #define DF_STORE_AV_PACK_SIZE_X2		0x20000		///每次处理的音视频包的大小 * 2
 #define DF_STORE_CHANNEL_MAX			5			///定义的总通道数量
 #define DF_STORE_AUDIO_FRAME_SIZE		168			///音频数据每包的大小
 #define DF_STORE_AUDIO_FRAME_MAX		8			///音频数据最大帧数，该值最小为6
 #define DF_STORE_WRITE_INDEX_START		1024		///录像数据开始写入的位置，单位为64K
-#define DF_STORE_HDISK_AV				"/disk1"	///录像信息所在的文件目录
+#define DF_STORE_FOLDER_LIST_LEN		16			///文件夹列表长度
 #define DF_STORE_FILE_LIST_HEAD_LEN		64			///文件列表头长度
 #define DF_STORE_FILE_LIST_LEN			128			///文件列表长度
+#define DF_STORE_NVR_LIST_LEN			64			///nvr文件列表信息长度
+#define DF_STORE_NVR_LIST_HEAD_LEN		64			///nvr文件列表信息头长度
+
+#define DF_STORE_MAGIC_FOLDER_LIST		"GP01"
+#define DF_STORE_MAGIC_FILE_LIST_HEAD	"FILELIST01"
+#define DF_STORE_MAGIC_FILE_LIST		"LIST0001"
+#define DF_STORE_MAGIC_NVR_LIST_HEAD	"NVR001"
+#define DF_STORE_MAGIC_NVR_LIST			"nvr001"
+
+
+
+#define DF_STORE_FIFO_NAME				"/tmp/cmd_pipe"
+#define DF_STORE_HDISK_AV				"/disk1"	///录像信息所在的文件目录
+#define DF_STORE_FOLDER_LIST_NAME		"folder_list"
+#define DF_STORE_FILE_LIST_NAME			"file_list"
+#define DF_STORE_HDISK_DIR_NAME			"dev/sda4"	///录像信息所在的文件目录
 
 
 /*********************************************************************************
@@ -111,6 +126,7 @@ typedef struct _st_store_audio_param
 	en_trige_style				e_trige_type;		///触发方式
 }st_store_audio_param;
 
+#pragma pack(1)
 
 /*********************************************************************************
   *结 构 体:st_store_video
@@ -135,7 +151,7 @@ typedef struct _st_store_av_data
 	unsigned long				v_len;				///buf里面的有效数据
 	unsigned char				iswrite;			///正在进行写操作
 	utc_time					time[2];			///要存储的数据生成的时间,分别表示前后两个64k区域的数据生成时间
-	unsigned char				frame_style[2];		///表示要存储的帧类型，1表示该64k数据中无I帧，2表示有I帧
+	unsigned char				frame_style[2];		///表示要存储的帧类型，BIT(1)表示该64k数据中有I帧，BIT(7)表示该区域存储已满
 }st_store_av_data;
  
  
@@ -177,6 +193,41 @@ typedef struct _st_store_av_manage
 
 
 /*********************************************************************************
+  *结 构 体:st_store_folder_list
+  *功能描述:存储录像数据的文件夹列表信息,固定长度为16字节
+  *---------------------------------------------------------------------------------
+  * @修改人		修改时间   	修改内容
+  * 白养民		2015-07-13	创建
+*********************************************************************************/
+typedef struct _st_store_folder_list
+{
+	s8						head[4];			///8字节（固定 "GP01"）
+	u32						start_index;		///开始写入裸盘中的位置
+	u16						folder_ID;			///文件夹ID
+	u8						time_bcd[6];		///文件夹日期
+}st_store_folder_list;
+
+
+
+/*********************************************************************************
+  *结 构 体:st_store_file_list_head
+  *功能描述:存储录像数据的文件列表信息头,固定长度为64字节
+  *---------------------------------------------------------------------------------
+  * @修改人		修改时间   	修改内容
+  * 白养民		2015-07-13	创建
+*********************************************************************************/
+typedef struct _st_store_file_list_head
+{
+	s8						head[10];			///8字节（固定 "FILELIST01"）
+	u8						time_start_bcd[6];	///文件开始时间	6字节BCD码（年月日时分秒）
+	u8						time_end_bcd[6];	///文件结束时间	6字节BCD码（年月日时分秒）
+	u16						file_num;			///总文件数	2字节（先低后高）
+	u32						filelist_size;		///文件总大小	4字节（先低后高），单位为64K
+	u32						write_index_start;	///当天数据写入的开始index位置
+	u32						write_index_end;	///当天数据写入的末尾index位置
+}st_store_file_list_head;
+
+/*********************************************************************************
   *结 构 体:st_store_file_list
   *功能描述:存储录像数据的文件列表信息,固定长度为128字节
   *---------------------------------------------------------------------------------
@@ -185,30 +236,16 @@ typedef struct _st_store_av_manage
 *********************************************************************************/
 typedef struct _st_store_file_list
 {
-	s8						head[8];			///8字节（固定 "LIST"）
-	s8						file_name[96];		///文件名称	96字节，不足96字节后面补齐0
+	s8						head[8];			///8字节（固定 "LIST0001"）
+	s8						file_name[64];		///文件名称	96字节，不足96字节后面补齐0
 	u16						file_len;			///文件长度 2字节（先低后高），单位为64K
-	u32						tick_start;			///开始秒	4字节（先低后高），当天的秒数
-	u32						tick_end;			///结束秒	4字节（先低后高），当天的秒数
+	u8						time_start_bcd[6];	///文件开始时间	6字节BCD码（年月日时分秒）
+	u8						time_end_bcd[6];	///文件结束时间	6字节BCD码（年月日时分秒）
+	u32						write_index_start;	///当天数据写入的开始index位置
+	u32						write_index_end;	///当天数据写入的末尾index位置
 	u8						channel;			///录像通道	1字节（0表示为1号通道）
-	u8						t_data[13];			///空13个字节
+	u8						t_data[43];			///空33个字节多几个字节是为了不溢出
 }st_store_file_list;
-
-
-/*********************************************************************************
-  *结 构 体:st_store_file_list
-  *功能描述:存储录像数据的文件列表信息头,固定长度为64字节
-  *---------------------------------------------------------------------------------
-  * @修改人		修改时间   	修改内容
-  * 白养民		2015-07-13	创建
-*********************************************************************************/
-typedef struct _st_store_file_list_head
-{
-	utc_time				time_start;			///文件开始时间	6字节BCD码（年月日时分秒）
-	utc_time				time_end;			///文件结束时间	6字节BCD码（年月日时分秒）
-	u16						file_num;			///总文件数	2字节（先低后高）
-	u32						filelist_size;		///文件总大小	4字节（先低后高），单位为64K
-}st_store_file_list_head;
 
 
 /*********************************************************************************
@@ -224,10 +261,14 @@ typedef struct _st_store_channel_param
 	st_store_video_param		param_video;		///存储的视频参数
 	st_store_audio_param		param_audio;		///音频参数
 	char						write_file[128];	///正在写入的文件的名称
-	int							write_file_fd;		///正在写入的文件的句柄
-	unsigned long				write_index;		///硬盘当前可以写入的位置，单位为64K
+	FILE *						write_file_fd;		///正在写入的文件的句柄
+	unsigned long				file_len;			///该文件对应的数据的总长度，单位为64K
 	utc_time					time_start;			///写入开始时间
 	utc_time					time_end;			///写入结束时间
+	u32							write_index_start;	///天数据写入的开始index位置
+	u32							write_index_end;	///天数据写入的末尾index位置
+	unsigned char				write_frame_style;	///正在存储处理的帧类型，BIT(1)表示该64k数据中有I帧，BIT(7)表示该区域存储已满
+	utc_time					write_time;				///正在存储处理的数据时间
 }st_store_channel_param;
 
 
@@ -240,18 +281,22 @@ typedef struct _st_store_channel_param
 *********************************************************************************/
 typedef struct _st_store_hdisk
 {
-	en_hdisk_state				disk_state;			///硬盘当前的状态
-	unsigned long				disk_size_av;		///硬盘可以存储的录像盘的大小，单位为65536字节，及64K
-	unsigned long				write_index;		///硬盘当前可以写入的位置，单位为64K
-	unsigned char				write_limit_mode;	///硬盘存储数据限制的模式0表示按照时间长度限制存储，1表示按照大小限制存储
-	unsigned long				write_size_max;		///硬盘存储录像单个文件的最大值，单位为64K
-	unsigned long				write_time_max;		///硬盘存储录像单个文件的时间最长值，单位为秒s
-	int 						write_hdisk_fd;		///裸盘写入的句柄
-	int							write_file_list_fd;	///正在写入的文件列表的句柄
-	char						write_folder[32];	///当前正在写入的文件夹位置
-	st_store_file_list_head		file_list_head;		///当天存储的数据的总信息
+	en_hdisk_state				disk_state;				///硬盘当前的状态
+	unsigned long				disk_size_av;			///硬盘可以存储的录像盘的大小，单位为65536字节，及64K
+	unsigned long				write_index;			///硬盘当前可以写入的位置，单位为64K
+	unsigned long				read_index;				///硬盘当前可以写入的位置，单位为64K
+	unsigned char				write_limit_mode;		///硬盘存储数据限制的模式0表示按照时间长度限制存储，1表示按照大小限制存储
+	unsigned long				write_size_max;			///硬盘存储录像单个文件的最大值，单位为64K
+	unsigned long				write_time_max;			///硬盘存储录像单个文件的时间最长值，单位为秒s
+	int 						write_hdisk_fd;			///裸盘写入的句柄
+	FILE * 						write_folder_list_fd;	///文件信息文件夹列表对应的文件句柄
+	FILE *						write_file_list_fd;		///正在写入的文件列表的句柄
+	utc_time					write_folder_day;		///当前正在写入的文件夹对应的时间，该时间小时，分钟，秒均为0
+	char						write_folder[32];		///当前正在写入的文件夹位置
+	st_store_file_list_head		file_list_head;			///当天存储的数据的总信息
 	st_store_channel_param		channel_param[DF_STORE_CHANNEL_MAX];	///存储的每个通道的参数
 }st_store_hdisk;
+#pragma pack()
 
 
 
